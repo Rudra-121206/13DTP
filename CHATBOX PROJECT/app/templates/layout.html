@@ -1,0 +1,17 @@
+<!doctype html> <!-- doctype tells the browser what version of HTML is being used in this page -->
+
+<html> <!-- your html should be wrapped in html tags -->
+
+  <head> <!-- stuff thats not visible on page -->
+    <title>Example Site - {{page_title}}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+
+  <body> <!-- stuff that is visible on page -->
+    {% include 'header.html' %}
+    {% include 'nav.html' %}
+    {% block content %}{% endblock %}
+    {% include 'footer.html' %}
+  </body>
+
+</html>
