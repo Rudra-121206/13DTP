@@ -1,8 +1,8 @@
 from app.routes import db
 
-Classes_Person = db.Table('Classes_Person', 
+Enrolement = db.Table('Enrolement', 
     db.Column('person_id', db.Integer, db.ForeignKey('Person.person_id')),
-    db.Column('classes_id', db.Integer, db.ForeignKey('Classes.class_id'))
+    db.Column('course_id', db.Integer, db.ForeignKey('Course.course_id'))
 ) 
 
 
@@ -15,33 +15,33 @@ class Person(db.Model):
     subject = db.Column(db.Text())
     role = db.Column(db.Text())
     year_level = db.Column(db.Text())
-    classes = db.relationship("Chats", back_populates="Class", cascade="all, delete-orphan")
-    Classes = db.relationship("Classes",
-        secondary="Classes_Person",
-        back_populates='person')
+
+    course_chats = db.relationship("Chat", back_populates="person", cascade="all, delete-orphan")
+    courses = db.relationship("Course", secondary="Enrolement", back_populates='people')
 
 
-class Classes(db.Model):
-    __tablename__ = "Classes"
-    class_id = db.Column(db.Integer, primary_key=True)
+class Course(db.Model):
+    __tablename__ = "Course"
+    course_id = db.Column(db.Integer, primary_key=True)
     joining_code = db.Column(db.Integer())
     subject = db.Column(db.Text())
     year_level = db.Column(db.Text())
-    persons = db.relationship("Chats", back_populates="person", cascade="all, delete-orphan")
-    person = db.relationship("Person",
-        secondary="Classes_Person",
-        back_populates="Classes")
+
+    people_chats = db.relationship("Chat", back_populates="course", cascade="all, delete-orphan")
+    people = db.relationship("Person", secondary="Enrolement", back_populates="courses")
 
 
-class Chats(db.Model):
-    __tablename__ = "Chats"
+class Chat(db.Model):
+    __tablename__ = "Chat"
     chats_id = db.Column(db.Integer, primary_key=True)
     person_id = db.Column(db.Integer, db.ForeignKey("Person.person_id"))
-    classes_id = db.Column(db.Integer, db.ForeignKey("Classes.class_id"))
-    person = db.relationship('Person', back_populates='classes')
-    Class = db.relationship('Classes', back_populates='persons')
+    course_id = db.Column(db.Integer, db.ForeignKey("Course.course_id"))
+    chat_content = db.Column(db.Text())
+    chat_status = db.Column(db.Text())
+    timestamp = db.Column(db.DateTime())
 
-
+    person = db.relationship('Person', back_populates='course_chats')
+    course = db.relationship('Course', back_populates='people_chats')
 
 
 
