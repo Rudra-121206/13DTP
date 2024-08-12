@@ -4,8 +4,10 @@
     {{ form.csrf_token }}
     <p>Name: {{ form.name }} <span style="color:red">{{ form.name.errors }}</span></p>
     <p>Email: {{ form.email }} <span style="color:red">{{ form.year.errors }}</span></p>
-    <p>Password: {{ form.password }} <span style="color:red">{{ form.description.errors }}</span></p>
-    <p>Confirm Password: {{ form.confirm }<span style="color:red">{{ form.description.errors }}</span>}</p>
-    <p>year;{{ form.year }}<span style="color:red">{{ form.description.errors }}</span></p>
+    <p>Password: {{ form.password }} <span style="color:red">{{ form.password.errors }}</span></p>
+    <p>Confirm Password: {{ form.confirm }}<span style="color:red">{{ form.confirm.errors }}</span></p>
+    <p>year;{{ form.year }}<span style="color:red">{{ form.year.errors }}</span></p>
+    <p>submit: {{ form.submit }}</p>
      
 </form> 
+{% endblock %}

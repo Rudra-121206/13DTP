@@ -1,3 +1,12 @@
 {% extends 'layout.html' %}
 {% block content %}
+<form methods="POST">
+    {{ form.csrf_token }}
+    {% for course in all_courses %}
+        <p>{{ course.subject }}</p>
+        <p>{{ course.id }}</p>
+        <p>{{ form.joining_code }} <span style="color:red">{{ form.joining_code.errors }}</span></p>
+        <p>submit: {{ form.submit }}</p>
+    {% endfor %}
+</form>
 {% endblock %}

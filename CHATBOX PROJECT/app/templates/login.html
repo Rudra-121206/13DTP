@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block content %}
+<form method="post" multipart/form-data>
+    {{ form.csrf_token }}
+    <p>Email: {{ form.email }} <span style="color:red">{{ form.email.errors }}</span></p>
+    <p>Password: {{ form.password }} <span style="color:red">{{ form.password.errors }}</span></p>
+    <p>submit: {{ form.submit }}</p>
+     
+</form> 
+{% endblock %}
