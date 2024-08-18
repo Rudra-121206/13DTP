@@ -34,6 +34,12 @@ class login(FlaskForm):
 
 class joining_code(FlaskForm):
     joining_code=IntegerField('Enter four digit joining code', [
-    validators.DataRequired(message='data is required'),
-    validators.NumberRange(min=1000, max=9999, message='please enter four digit number')])
+        validators.DataRequired(message='data is required'),
+        validators.NumberRange(min=1000, max=9999, message='please enter four digit number')])
     submit =SubmitField('join')
+
+class enter_chat(FlaskForm):
+    chat = StringField('Enter text', [
+        validators.data_required(message="data is required"),
+        validators.Length(message='message must be below 60 characters')])
+    submit = SubmitField('send')

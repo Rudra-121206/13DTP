@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block content %}
+<form methods="POST">
+    {{ form.csrf_token }}
+    {% for chat in all_chats %}
+        <p>{{ chats.content }}</p>
+        <p>{{ chats.id }}</p>
+        <p>{{ form.chats }} <span style="color:red">{{ form.chats.errors }}</span></p>
+        <p>submit: {{ form.submit }}</p>
+    {% endfor %}
+</form>
+{% endblock %}

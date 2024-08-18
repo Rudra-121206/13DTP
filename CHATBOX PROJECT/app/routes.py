@@ -3,7 +3,8 @@ from flask import render_template, abort, redirect, request, url_for, flash
 from flask_sqlalchemy import SQLAlchemy # no more boring old SQL for us!
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, current_user, LoginManager, UserMixin
+from flask_login import login_user, current_user, LoginManager, UserMixin, logout_user, login_required
+import datetime
 
 
 
@@ -30,30 +31,26 @@ from app import forms
 
 @app.route('/all_courses/<int:ref>', methods=['GET', 'POST'])
 def all_courses(ref):
-    if current_user.is_authenticated is True:
-        all_courses = models.Course.query.all()
-
-        form = forms.joining_code()
-        if request.method == 'GET':
-            return render_template('all_courses.html', form=form, all_courses=all_courses)
-        elif request.method == 'POST':
-            form.validate_on_sumbit()
-            
-            if form.joining_code.data == models.Course.joining_code.filter_by(id=form.id.data):
-                new_enrolment = models.enrolment()
-                new_enrolment.person_id = ref
-                new_enrolment.course_id = form.id.data
-                return redirect(url_for('my_classes', ref=ref))
-            else:
-                return render_template('all_courses.html', form=form, all_courses=all_courses)
+    all_courses = models.Course.query.all()
+    form = forms.joining_code
+    if request.method == 'GET':
+        return render_template('all_courses.html', form=form, all_courses=all_courses)
+    elif request.method == 'POST':
+        form.validate_on_sumbit()    
+        if form.joining_code.data == models.Course.joining_code.filter_by(id=form.id.data):
+            new_enrolment = models.enrolment()
+            new_enrolment.person_id = ref
+            new_enrolment.course_id = form.id.data
+            return redirect(url_for('my_classes', ref=ref))
         else:
-            404()
+            return render_template('all_courses.html', form=form, all_courses=all_courses)
     else:
-        return redirect(url_for('login'))
+        404()     
+
 
 @app.route("/create_acc", methods=['GET', 'POST'])
 def create_acc():
-    form = forms.register()
+    form = forms.register
     if request.method == 'GET':
         return render_template('create_acc.html', form=form, title='Create an account(student)')
     else:
@@ -71,7 +68,7 @@ def create_acc():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = forms.login()
+    form = forms.login
 
     if current_user.is_authenticated is True:
         flash('user is logged in')
@@ -107,11 +104,41 @@ def my_classes(ref):
         flash('Invalid credentials. Please try again.')
         return redirect(url_for('login'))
     return render_template('my_classes.html', course_user=course_user)
+     
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404
+
+
+@app.route("/chats/<int:ref>/<int:course:id>", methods=['GET', 'POST'])
+def chat(ref, course_id):
+    if not current_user.is_authenticated:
+        return redirect(url_for('/login'))
+    else:
+        form = forms.enter_chat
+        if request.method == "GET":
+            return render_template('chats.html', form=form)
+        elif request.method == "POST":
+            form.validate_on_submit()
+            new_chat = models.Chat()
+            new_chat.course_id = course_id
+            new_chat.person_id = ref
+            new_chat.chat_content = form.chat.data
+        else:
+            404()
+
+
+         
+
+
 
 
 
