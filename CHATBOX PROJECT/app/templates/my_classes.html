@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
-{% for i in course_user %}
+{% for course in course_user %}
 
-    <p>{{ i.subject }}</p>
+    <a href="/chats/{{current_user.id}}/{{course.id}}">{{ course.subject }} </a>
 {% endfor %}
 {% endblock %}   

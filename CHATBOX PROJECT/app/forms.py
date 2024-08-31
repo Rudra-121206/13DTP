@@ -28,18 +28,22 @@ class login(FlaskForm):
     email = EmailField('Email', [validators.Email(message='please enter a valid email')])
     password = PasswordField('Password', [
     validators.DataRequired(message='Password is required.'),
-    validators.Length(message='Password must be between 6 and ten characters long.', min=6, max=10)])
+    validators.Length(min=6, max=10, message='Password must be between 6 and ten characters long.' )])
     submit = SubmitField('login')
     
 
 class joining_code(FlaskForm):
+    course=IntegerField(validators=[DataRequired(message='id is required')])
     joining_code=IntegerField('Enter four digit joining code', [
         validators.DataRequired(message='data is required'),
         validators.NumberRange(min=1000, max=9999, message='please enter four digit number')])
-    submit =SubmitField('join')
+    submit = SubmitField('join')
 
 class enter_chat(FlaskForm):
     chat = StringField('Enter text', [
         validators.data_required(message="data is required"),
-        validators.Length(message='message must be below 60 characters')])
+        validators.Length(message='message must be below 60 characters', min=2, max=60)])
     submit = SubmitField('send')
+
+# class create_course(FlaskForm):
+#     subject = StringField

@@ -37,7 +37,7 @@ class Course(db.Model):
 
 class Chat(db.Model):
     __tablename__ = "Chat"
-    chats_id = db.Column(db.Integer, primary_key=True)
+    chat_id = db.Column(db.Integer, primary_key=True)
     person_id = db.Column(db.Integer, db.ForeignKey("User.id"))
     course_id = db.Column(db.Integer, db.ForeignKey("Course.id"))
     chat_content = db.Column(db.Text())

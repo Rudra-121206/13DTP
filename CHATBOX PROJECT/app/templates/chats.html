@@ -1,12 +1,15 @@
 {% extends 'layout.html' %}
 {% block content %}
-<form methods="POST">
-    {{ form.csrf_token }}
-    {% for chat in all_chats %}
-        <p>{{ chats.content }}</p>
-        <p>{{ chats.id }}</p>
-        <p>{{ form.chats }} <span style="color:red">{{ form.chats.errors }}</span></p>
-        <p>submit: {{ form.submit }}</p>
+    {% for chat in chats %}
+        {% i=+1 %}
+        <p>{{ name[i] }}</p>
+        <p>{{ chat.chat_content }}</p>
+        <p>{{ chat.person_id }}</p>
+        <p>{{ chat.datetime }}</p>
     {% endfor %}
-</form>
+    <form method="POST">
+        {{ form.csrf_token }}
+        <p>{{ form.chat }} <span style="color:red">{{ form.chat.errors }}</span></p>
+        <p>submit: {{ form.submit }}</p>
+    </form>
 {% endblock %}

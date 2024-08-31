@@ -1,12 +1,15 @@
 {% extends 'layout.html' %}
-{% block content %}
-<form methods="POST">
-    {{ form.csrf_token }}
-    {% for course in all_courses %}
+{% block content %} 
+{% for course in all_courses %}
+    <form method="POST" enctype="multipart/form-data">
+    
+        {{ form.csrf_token }}
+   
         <p>{{ course.subject }}</p>
-        <p>{{ course.id }}</p>
+        <p>{{ form.course }}<span style="color:red">{{ form.joining_code.errors }}</span></p>
         <p>{{ form.joining_code }} <span style="color:red">{{ form.joining_code.errors }}</span></p>
         <p>submit: {{ form.submit }}</p>
-    {% endfor %}
-</form>
+    </form>
+{% endfor %} 
+ 
 {% endblock %}
