@@ -1,11 +1,11 @@
 from app import app
-from flask import render_template, abort, redirect, request, url_for, flash
+from flask import render_template, abort, redirect, request, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy # no more boring old SQL for us!
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, current_user, LoginManager, UserMixin, logout_user, login_required
 from datetime import datetime
-
+import random
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -31,64 +31,71 @@ from app import forms
 
 @app.route('/all_courses/<int:ref>', methods=['GET', 'POST'])
 def all_courses(ref):
-    all_courses = models.Course.query.all()
-    form = forms.joining_code()
-    if request.method == 'GET':
-        print('half')
-        return render_template('all_courses.html', form=form, all_courses=all_courses)
+    if not current_user.is_authenticated:
+        flash('User is not authenticated')
+        return redirect(url_for('login'))
+    elif current_user.has_role('teacher'):
+        flash('User access invalid')
+        return redirect(url_for('/create_course'))
+    else:
+        all_courses = models.Course.query.all()
+        form = forms.joining_code()
+        if request.method == 'GET':
+            print('half')
+            return render_template('all_courses.html', form=form, all_courses=all_courses)
 
-    elif request.method == 'POST':
-        print("data") 
-         
-        print(form.joining_code.data) 
-        print(form.course.data)
-        course = models.Course.query.filter_by(id=form.course.data).first()
-        if course is not None:
+        elif request.method == 'POST':
+            print("data") 
+            
+            print(form.joining_code.data) 
+            print(form.course.data)
+            course = models.Course.query.filter_by(id=form.course.data).first()
+            if course is not None:
 
-            if form.joining_code.data == course.joining_code:
+                if form.joining_code.data == course.joining_code:
 
-                print('success')
-                user = models.User.query.get(ref)
-                course = models.Course.query.get(form.course.data)
+                    print('success')
+                    user = models.User.query.get(ref)
+                    course = models.Course.query.get(form.course.data)
 
-                if user and course:
-                        #check if user is already enrolled into the course
-                    if course in user.courses:
-                        print("can't add more")
+                    if user and course:
+                            #check if user is already enrolled into the course
+                        if course in user.courses:
+                            print("can't add more")
 
-                        flash('you are already enrolled into this course')
-                        return redirect(url_for('my_courses', ref=ref))
+                            flash('you are already enrolled into this course')
+                            return redirect(url_for('my_courses', ref=ref))
+                        else:
+                            print("can add more")
+                            # Add the course to the user's courses list
+                            user.courses.append(course)
+                            # Commit the changes to the database
+                            db.session.add(user)
+                            db.session.commit()
+                            print(f"User {user.name} has been enrolled in the course ")
+
+                            return redirect(url_for('my_courses', ref=ref))
                     else:
-                        print("can add more")
-                        # Add the course to the user's courses list
-                        user.courses.append(course)
-                        # Commit the changes to the database
-                        db.session.add(user)
-                        db.session.commit()
-                        print(f"User {user.name} has been enrolled in the course ")
-
-                        return redirect(url_for('my_courses', ref=ref))
+                        flash("error in the system")
+                        return render_template('all_courses.html', form=form, all_courses=all_courses)
                 else:
-                    flash("error in the system")
+                    flash("invalid credentials, please try again")
                     return render_template('all_courses.html', form=form, all_courses=all_courses)
             else:
                 flash("invalid credentials, please try again")
-                return render_template('all_courses.html', form=form, all_courses=all_courses)
+                return render_template('all_courses.html', form=form, all_courses=all_courses)    
         else:
             flash("invalid credentials, please try again")
-            return render_template('all_courses.html', form=form, all_courses=all_courses)    
-    else:
-        flash("invalid credentials, please try again")
-        return render_template('all_courses.html', form=form, all_courses=all_courses)
+            return render_template('all_courses.html', form=form, all_courses=all_courses)
 
-@app.route("/create_acc", methods=['GET', 'POST'])
+@app.route("/create_acc_student", methods=['GET', 'POST'])
 def create_acc():
     form = forms.register()
     if current_user.is_authenticated is True:
         flash('user is logged in')
-        return redirect(url_for('all_courses', ref=current_user.id))
+        return redirect(url_for('my_courses', ref=current_user.id))
     elif request.method == 'GET':
-        return render_template('create_acc.html', form=form, title='Create an account(student)')
+        return render_template('create_acc_student.html', form=form, title='Create an account(student)')
     else:
         form.validate_on_submit()
         new_user = models.User()
@@ -101,6 +108,26 @@ def create_acc():
         db.session.commit()
         flash('login with your details')
         return redirect(url_for('my_courses', ref=new_user.id))
+
+@app.route("/create_acc_teacher", methods=['GET', 'POST'])
+def create_acc_teacher():
+    form = forms.register_()
+    if current_user.is_authenticated is True:
+        flash('user is logged in')
+        return redirect(url_for('my_courses', ref=current_user.id))
+    elif request.method == 'GET':
+        return render_template('create_acc_teacher.html', form=form, title='Create an account(student)')
+    else:
+        form.validate_on_submit()
+        new_user = models.User()
+        new_user.role = "teacher"
+        new_user.name = form.name.data
+        new_user.email = form.email.data
+        new_user.password = generate_password_hash(form.password.data)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('login with your details')
+        return redirect(url_for('my_courses', ref=new_user.id))    
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -135,10 +162,6 @@ def login():
 
     return render_template('login.html', form=form)
 
- 
-
-
-
 
 @app.route("/my_courses/<int:ref>")
 def my_courses(ref):
@@ -169,20 +192,21 @@ def not_found_error(error):
 
 @app.route("/chats/<int:ref>/<int:course_id>", methods=['GET', 'POST'])
 def chats(ref, course_id):
-    chats = models.Chat.query.filter_by(course_id=course_id).all()
-    for chat in chats: 
-        name = []
-        print(chat)
-        name_user = models.User.query.filter_by(id=chat.person_id).all()
-        print(name_user)
-        name_user.name(name)
-
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
+        
+        chats = models.Chat.query.filter_by(course_id=course_id).all()
+        name = []
+        for chat in chats:
+            print(chat.person_id)
+            user = models.User.query.filter_by(id=chat.person_id).all()
+            for name_user in user:
+                name.append(name_user.name)
+                print(name)
         form = forms.enter_chat()
         if request.method == "GET":
-            return render_template('chats.html', form=form, chats=chats, name=name)
+            return render_template('chats.html', form=form, chats=chats, name=name, course_id=course_id)
         elif request.method == "POST":
             form.validate_on_submit()
             new_chat = models.Chat()
@@ -198,10 +222,54 @@ def chats(ref, course_id):
             pass
          
 
+@app.route('/create_course', methods=['GET', 'POST'])
+@login_required
+def create_course():
+    if not current_user.is_authenticated:
+        flash('User is not authenticated')
+        return redirect(url_for('login'))
+    elif current_user.has_role('teacher'):   
+        form = forms.CreateCourseForm()
+        if request.method == 'GET':
+            return render_template('create_course.html', form=form)
+        else:
+            form.validate_on_submit()
+            new_course = models.Course(
+                joining_code=random.randint(1111, 9999),
+                subject=form.subject.data,
+                year_level=form.year_level.data
+            )
+            db.session.add(new_course)
+            db.session.commit()
+            user = models.User.query.get(current_user.id)
+            last_course = models.Course.query.order_by(models.Course.id.desc()).first()
+            course = models.Course.query.get(last_course.id)
 
-
-
-
+            if user and course:
+            #check if user is already enrolled into the course
+                if course in user.courses:
+                    print("can't add more")
+                    flash('you are already enrolled into this course')
+                    return redirect(url_for('my_courses', ref=current_user.id))
+                else:
+                    print("can add more")
+                    # Add the course to the user's courses list
+                    user.courses.append(course)
+                    # Commit the changes to the database
+                    db.session.add(user)
+                    db.session.commit()
+                    flash('Course created successfully!', 'success')
+                    return render_template('my_courses', ref=current_user.id)  # Redirect to a relevant page
+    else:
+        flash('Student access unauthorized')
+        return render_template('my_courses', ref=current_user.id)
+    
+@app.route('/check_new_messages/<int:course_id>/<int:last_chat_id>', methods=['GET'])
+def check_new_messages(course_id, last_chat_id):
+    # Query to find if there's any chat with an ID greater than the last known chat ID
+    new_chats = models.Chat.query.filter(models.Chat.course_id == course_id, models.Chat.chat_id > last_chat_id).count()
+    
+    return jsonify({"new_messages": new_chats > 0})
 
 
  

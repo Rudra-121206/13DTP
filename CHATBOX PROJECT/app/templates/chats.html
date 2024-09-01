@@ -1,15 +1,29 @@
+
+<script>
+    // Function to check for new messages
+    function checkForNewMessages() {
+        fetch('{{ url_for("check_new_messages", course_id=course_id, last_chat_id=chats[-1].chat_id if chats else 0) }}')
+            .then(response => response.json())
+            .then(data => {
+                if (data.new_messages) {
+                    location.reload();  // Reload the page if new messages are found
+                }
+            });
+    }
+
+    // Set an interval to check for new messages every 5 seconds
+    setInterval(checkForNewMessages, 5000);
+</script>
 {% extends 'layout.html' %}
 {% block content %}
     {% for chat in chats %}
-        {% i=+1 %}
-        <p>{{ name[i] }}</p>
+        <p>{{ name[loop.index0] }}</p>
         <p>{{ chat.chat_content }}</p>
-        <p>{{ chat.person_id }}</p>
-        <p>{{ chat.datetime }}</p>
+        <p>{{ chat.timestamp }}</p>
     {% endfor %}
     <form method="POST">
         {{ form.csrf_token }}
         <p>{{ form.chat }} <span style="color:red">{{ form.chat.errors }}</span></p>
-        <p>submit: {{ form.submit }}</p>
+        <p>{{ form.submit }}</p>
     </form>
 {% endblock %}

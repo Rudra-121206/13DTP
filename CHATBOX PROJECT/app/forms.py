@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 
-class register(FlaskForm):
+class register_student(FlaskForm):
 
     email = EmailField('Email', [validators.Email(message='please enter a valid email')])
     password = PasswordField('Password', validators=[
@@ -45,5 +45,21 @@ class enter_chat(FlaskForm):
         validators.Length(message='message must be below 60 characters', min=2, max=60)])
     submit = SubmitField('send')
 
-# class create_course(FlaskForm):
-#     subject = StringField
+class CreateCourseForm(FlaskForm):
+    joining_code = IntegerField('Joining Code', validators=[DataRequired()])
+    subject = StringField('Subject', validators=[DataRequired(), Length(min=2, max=100)])
+    year_level = StringField('Year Level', validators=[DataRequired(), Length(min=1, max=10)])
+    submit = SubmitField('Create Course')
+
+
+class create_acc_teacher(FlaskForm):
+    email = EmailField('Email', [validators.Email(message='please enter a valid email')])
+    password = PasswordField('Password', validators=[
+    DataRequired(message='Password is required.'),
+    EqualTo('confirm', message='Passwords must match.'),
+    Length(message='Password must be between 6 and ten characters long.', min=6, max=10),
+    ])
+    confirm = PasswordField('Confirm password', validators=[EqualTo(fieldname=password, message='password does not match')])
+    name = StringField('name', validators=[DataRequired(message='Name is required'), 
+    Length(message='name must be between 6 and 12 characters long', min=6, max=12)])
+    submit = SubmitField('Register')

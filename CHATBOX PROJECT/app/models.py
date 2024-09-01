@@ -13,7 +13,6 @@ class User(UserMixin, db.Model):
     name = db.Column(db.Text())
     email = db.Column(db.Text())
     password = db.Column(db.Text())
-    subject = db.Column(db.Text())
     role = db.Column(db.Text())
     year_level = db.Column(db.Text())
 
@@ -22,6 +21,9 @@ class User(UserMixin, db.Model):
 
     def get_id(self):
         return str(self.id)
+
+    def has_role(self, role_name):
+        return self.role == role_name
 
 
 class Course(db.Model):
