@@ -1,7 +1,17 @@
 {% extends 'layout.html' %}
 {% block content %}
-{% for course in course_user %}
-
-    <a href="/chats/{{current_user.id}}/{{course.id}}">{{ course.subject }} </a>
-{% endfor %}
+<div class="grid-container">
+    {% for course in course_user %}
+    <div class="item">  
+        {% if current_user.has_role('teacher') %}
+            <a href="/delete_course/{{current_user.id}}/{{course.id}}">delete course</a>
+            <a href="/chats/{{current_user.id}}/{{course.id}}">{{ course.subject }} </a>
+            <p> Course ID:{{course.id}}</p>
+            <p> Course joining Code:{{course.joining_code}}</p>
+        {% else %}
+            <a href="/chats/{{current_user.id}}/{{course.id}}">{{ course.subject }} </a>
+        {% endif %}
+    </div> 
+    {% endfor %}
+</div>
 {% endblock %}   

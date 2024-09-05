@@ -1,15 +1,28 @@
 {% extends 'layout.html' %}
 {% block content %} 
-{% for course in all_courses %}
-    <form method="POST" enctype="multipart/form-data">
-    
-        {{ form.csrf_token }}
-   
-        <p>{{ course.subject }}</p>
-        <p>{{ form.course }}<span style="color:red">{{ form.joining_code.errors }}</span></p>
-        <p>{{ form.joining_code }} <span style="color:red">{{ form.joining_code.errors }}</span></p>
-        <p>submit: {{ form.submit }}</p>
+
+<div class="search-bar">
+    <form method="POST" action="{{ url_for('all_courses', ref=current_user.id) }}">
+        {{ search_form.csrf_token }}
+        {{ search_form.search(size=40, class_="search-field") }}
+        {{ search_form.submit_search(class_="search-btn") }}
     </form>
-{% endfor %} 
+</div>
+
+<div class="grid-container">
+    {% for course in all_courses %}
+        <div class="form">
+            <form method="POST" enctype="multipart/form-data">
+            
+                {{ form.csrf_token }}
+        
+                <p>{{ course.subject }}</p>
+                <p>course id:{{ form.course }}<span style="color:red">{{ form.joining_code.errors }}</span></p>
+                <p>Joining cdoe:{{ form.joining_code }} <span style="color:red">{{ form.joining_code.errors }}</span></p>
+                <p>submit: {{ form.submit_enroll }}</p>
+            </form> 
+        </div>
+    {% endfor %}  
+</div>
  
 {% endblock %}

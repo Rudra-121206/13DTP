@@ -1,0 +1,344 @@
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Body Styling */
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  
+  
+  /* Navbar Styling */
+  .navbar {
+    background-color: #00aaff;
+    color: white;
+    position: sticky; /* Sticky position */
+    top: 0; /* Sticks to the top */
+    width: 100%; /* Full-width */
+    z-index: 1000; /* Ensure it stays on top */
+    
+  }
+  
+  .navbar ul {
+    list-style-type: none;
+    padding: none;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .navbar ul li a {
+    color: white;
+    text-decoration: none; /* Remove underline */
+    padding: 14px 20px;
+    display: block;
+  }
+  
+  .navbar ul li a:hover {
+    background-color: #575757;
+    text-decoration: none; /* Keep underline removed on hover */
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;  /* Full viewport height */
+  }
+
+  
+ 
+  .form {
+    width: 350px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    margin-top: 70px; /* Adding margin to account for the top bar */
+    
+}
+
+.form img {
+    width:  20%;
+    height: 20%;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.form p {
+    text-align: left;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.form label {
+    font-weight: bold;
+}
+
+.form select,
+.form input[type="email"],
+.form input[type="password"],
+.form input[type="text"],
+.form input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #00A2E8;
+    color: white;
+    text-align: center;
+}
+
+.form input[type="email"]::placeholder,
+.form input[type="password"]::placeholder, 
+.form input[type="text"]::placeholder,
+.form input[type="number"]::placeholder {
+    color: white;
+}
+
+.form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #00A2E8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form button:hover {
+    background-color: #007bb5;
+}
+
+.form .submit-button {
+    font-size: 24px;
+    color: white;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+}
+
+
+/* Chat Container */
+.chat-container {
+  width: 100%;
+  height: 600px;
+  background-color: #ffffff;
+  border: 2px solid #00aaff;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Chat Messages */
+.chat-window {
+  flex: 1;
+  padding: 1%;
+  background-color: #fff;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  max-width: 70%;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #ff4b4b;
+  color: #ffffff;
+  border-radius: 15px;
+  position: relative;
+  font-size: 200%;
+  line-height: 1.5;
+}
+
+.message:before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 10px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #ff4b4b;
+}
+
+/* Align messages to the right for user */
+.message.user {
+  align-self: flex-end;
+  background-color: #ff4b4b;
+}
+
+.message.user:before {
+  left: auto;
+  right: -10px;
+  border-right: none;
+  border-left: 10px solid #ff4b4b;
+}
+
+/* Username and timestamp */
+.message p {
+  margin: 0;
+}
+
+.message .username {
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.message .timestamp {
+  font-size: 10px;
+  text-align: right;
+  color: #ccc;
+  margin-top: 5px;
+}
+
+/* Input area */
+.input-area {
+  background-color: #00aaff;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.input-area input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.input-area button {
+  background-color: #004c6d;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-area button img {
+  width: 20px;
+  height: 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin:auto;
+  margin-top: 2.5%;
+}
+
+/* Grid Item (Course Card) */
+.grid-container .item {
+  background-color: #000;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  position: relative;
+}
+
+/* Card Styling */
+.item {
+  position: relative;
+  padding: 20px;
+  background-image: url('brush-stroke.png'); /* Assuming brush-stroke.png is the background image */
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.item p {
+  margin-bottom: 10px;
+}
+
+.item a {
+  color: #00aaff;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 10px;
+  background-color: #00aaff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.item a:hover {
+  background-color: #007bb5;
+}
+
+/* Teacher Specific Links */
+.item a[href*="delete_course"] {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff4c4c;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.item a[href*="delete_course"]:hover {
+  background-color: #d42f2f;
+}
+
+.search-bar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.search-field {
+  width: 60%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.search-btn {
+  padding: 10px 20px;
+  background-color: #00A2E8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.search-btn:hover {
+  background-color: #007bb5;
+}

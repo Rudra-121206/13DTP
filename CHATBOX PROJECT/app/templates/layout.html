@@ -21,10 +21,15 @@
   
   
     {% include 'header.html' %}
-    {% include 'nav.html' %}
-    {% block content %}<div class="stars"></div>
-      <div class="twinkling"></div>
-      <div class="clouds"></div>{% endblock %}
+    <div class="nav">
+      {% include 'nav.html' %}
+    </div>
+    {% block content %}
+
+
+    
+   
+    {% endblock %}
     {% include 'footer.html' %}
   </body>
 

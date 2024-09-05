@@ -53,7 +53,6 @@ class Chat(db.Model):
 
 
 
-
     
 
 

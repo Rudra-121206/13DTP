@@ -1,10 +1,23 @@
 {% extends 'layout.html' %}
 {% block content %}
-<form method="post" multipart/form-data>
-    {{ form.csrf_token }}
-    <p>Email: {{ form.email }} <span style="color:red">{{ form.email.errors }}</span></p>
-    <p>Password: {{ form.password }} <span style="color:red">{{ form.password.errors }}</span></p>
-    <p>submit: {{ form.submit }}</p>
-     
-</form> 
+<div class="container">
+    <div class="form">
+        <form method="post" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            <img src="/static/images/login img.png" alt="LOGIN IMAGE">
+
+            <p>Email: {{ form.email }}</p>
+            {% if form.email.errors %}
+                <span style="color:red">{{ form.email.errors[0] }}</span>
+            {% endif %}
+
+            <p>Password: {{ form.password }}</p>
+            {% if form.password.errors %}
+                <span style="color:red">{{ form.password.errors[0] }}</span>
+            {% endif %}
+            
+            <p>{{ form.submit }}</p>
+        </form> 
+    </div>
+</div>
 {% endblock %}

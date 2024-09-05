@@ -1,17 +1,32 @@
 <nav>
-    
-    {% if current_user.is_authenticated %}
-        <a href="/my_courses/{{current_user.id}}">my_courses</a>
-        <a href="/all_courses/{{current_user.id}}">all_classes</a>
-        <a href="/create_course">create course</a>
+    <div class="navbar">
+        {% if current_user.is_authenticated %}
+            {% if current_user.has_role('teacher') %}
+                <ul>
 
-    {% else %}
-        <a href="/">Home</a>
-        <a href="/login">login</a>
-        <a href="/create_acc_student">create account student</a>
-        <a href="/create_acc_teacher">create account teacher</a>
+                    <li><a href="/my_courses/{{current_user.id}}">my_courses</a></li>
+                    
+                    <li><a href="/create_course">create course</a></li>
+                    <li><a href="/logout">logout</a></li>
+                </ul>
+            {% else %}
+                <ul>
+
+                    <li><a href="/my_courses/{{current_user.id}}">my courses</a></li>
+                    <li><a href="/all_courses/{{current_user.id}}">all courses</a></li>
+                    <li><a href="/logout">logout</a></li>
+                </ul>
+            {% endif %}
+
+        {% else %}
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/login">login</a></li>
+                <li><a href="/create_acc_student">create account student</a></li>
+                <li><a href="/create_acc_teacher">create account teacher</a></li>
+            </ul>
+        {% endif %}
+
         
-    {% endif %}
-     
-    <a href="/logout">logout</a>
+    </div>
 </nav>

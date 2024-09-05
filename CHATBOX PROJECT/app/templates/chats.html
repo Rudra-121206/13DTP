@@ -12,18 +12,30 @@
     }
 
     // Set an interval to check for new messages every 5 seconds
-    setInterval(checkForNewMessages, 5000);
+    setInterval(checkForNewMessages, 1000);
 </script>
 {% extends 'layout.html' %}
 {% block content %}
-    {% for chat in chats %}
-        <p>{{ name[loop.index0] }}</p>
-        <p>{{ chat.chat_content }}</p>
-        <p>{{ chat.timestamp }}</p>
-    {% endfor %}
-    <form method="POST">
-        {{ form.csrf_token }}
-        <p>{{ form.chat }} <span style="color:red">{{ form.chat.errors }}</span></p>
-        <p>{{ form.submit }}</p>
+<div class="chat-container">
+    <div class="chat-window">
+        {% for chat in chats %}
+        <div class="message {% if chat.user_id == current_user.id %}user{% endif %}">
+            <p class="username">{{ name[loop.index0] }}</p>
+            <p>{{ chat.chat_content }}</p>
+            <p class="timestamp">{{ chat.timestamp }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <form method="POST" class="input-area">
+        {{ form.hidden_tag() }}  <!-- Renders the CSRF token -->
+    
+        <!-- Render the chat input field with a placeholder -->
+        {{ form.chat }}
+    
+        <!-- Render the submit button with an icon -->
+        <button type="submit">
+            <img src="{{ url_for('static', filename='send-icon.png') }}" alt="Send">
+        </button>
     </form>
+</div>
 {% endblock %}
