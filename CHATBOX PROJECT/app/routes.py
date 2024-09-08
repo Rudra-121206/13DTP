@@ -90,17 +90,18 @@ def create_acc():
     elif request.method == 'GET':
         return render_template('create_acc_student.html', form=form, title='Create an account(student)')
     else:
-        form.validate_on_submit()
-        new_user = models.User()
-        new_user.role = "student"
-        new_user.name = form.name.data
-        new_user.email = form.email.data
-        new_user.password = generate_password_hash(form.password.data)
-        new_user.year_level = form.year.data
-        db.session.add(new_user)
-        db.session.commit()
-        flash('login with your details')
-        return redirect(url_for('my_courses', ref=new_user.id))
+        if form.validate_on_submit():
+            
+            new_user = models.User()
+            new_user.role = "student"
+            new_user.name = form.name.data
+            new_user.email = form.email.data
+            new_user.password = generate_password_hash(form.password.data)
+            new_user.year_level = form.year.data
+            db.session.add(new_user)
+            db.session.commit()
+            flash('login with your details')
+            return redirect(url_for('my_courses', ref=new_user.id))
 
 @app.route("/create_acc_teacher", methods=['GET', 'POST'])
 def create_acc_teacher():
@@ -144,14 +145,10 @@ def login():
         if user and check_password_hash(user.password, password):
             login_user(user)
 
-            flash('Logged in successfully.')
-            if user.role == "student":
-                print(user.role)
-                return redirect(url_for('my_courses', ref=current_user.id))
-            else:
-                return redirect(url_for('my_courses', ref=current_user.id))
+            flash('Logged in successfully.', 'success')
+            return redirect(url_for('my_courses', ref=current_user.id))
         else:
-            flash('Invalid credentials. Please try again.')
+            flash('Invalid credentials. Please try again.', 'error')
 
     return render_template('login.html', form=form)
 
@@ -166,7 +163,7 @@ def my_courses(ref):
         else:
             course_user = courses.courses
     else:
-        flash('Login required')
+        flash('Login required', 'warning')
         return redirect(url_for('login'))
     return render_template('my_classes.html', course_user=course_user)
      
@@ -286,19 +283,19 @@ def delete_course(ref, course_id):
                     except Exception as e:
                         print('fail')
                         db.session.rollback()
-                        flash(f"Error deleting course:{e}", "danger")
+                        flash(f"Error deleting course:{e}", "warning")
                         return redirect(url_for('my_courses', ref=ref))
                 else:
                     flash(f"No course found with ID {course_id}.", "warning")
                     return redirect(url_for('my_courses', ref=ref))
             else:
-                flash("autharization invalid, this course is not yours")
+                flash("autharization invalid, this course is not yours", "error")
                 return redirect(url_for('my_courses', ref=ref))
         else:
-            flash("such user or course does not exist")
+            flash("such user or course does not exist", "error")
             return redirect(url_for('my_courses', ref=ref))
     else:
-        flash('Student access unauthorized')
+        flash('Student access unauthorized', "error")
         return render_template('my_courses', ref=ref)
     
 

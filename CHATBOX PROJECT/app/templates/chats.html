@@ -17,9 +17,9 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="chat-container">
-    <div class="chat-window">
+    <div class="chat-window" id="chat-window">
         {% for chat in chats %}
-        <div class="message {% if chat.user_id == current_user.id %}user{% endif %}">
+        <div class="message {% if chat.person_id == current_user.id %}user{% endif %}">
             <p class="username">{{ name[loop.index0] }}</p>
             <p>{{ chat.chat_content }}</p>
             <p class="timestamp">{{ chat.timestamp }}</p>
@@ -38,4 +38,11 @@
         </button>
     </form>
 </div>
+<!-- JavaScript to scroll chat window to the bottom on load -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var chatWindow = document.getElementById('chat-window');
+        chatWindow.scrollTop = chatWindow.scrollHeight;  // Scroll to the bottom
+    });
+</script>
 {% endblock %}

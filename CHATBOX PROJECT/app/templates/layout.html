@@ -10,11 +10,16 @@
   <body> <!-- stuff that is visible on page -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        <ul class="flashes">
-            {% for category, message in messages %}
-                <li class="flash-{{ category }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
+        <div class="notification-container">
+          <ul class="flashes">
+              {% for category, message in messages %}
+                  <li class="flash-{{ category }}">
+                    {{ message }}
+                    <span class="close-btn">&times;</span> <!-- Close button -->
+                  </li>
+              {% endfor %}
+          </ul>
+        </div>
       {% endif %}
     {% endwith %}
       
@@ -31,6 +36,7 @@
    
     {% endblock %}
     {% include 'footer.html' %}
+    <script src="/static/notifications.js"></script>
   </body>
 
 </html>
