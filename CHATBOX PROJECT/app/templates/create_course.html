@@ -4,10 +4,20 @@
     <div class="form">
         <form method="POST" enctype="multipart/form-data">
             {{ form.csrf_token }}
-            <p>Name: {{ form.subject }} <span style="color:red">{{ form.subject.errors }}</span></p>
-            <p>Year: {{ form.year_level }} <span style="color:red">{{ form.year_level.errors }}</span></p>
-            <p> {{ form.submit(class_="search-btn") }}</p>
             
+            <p>Name: {{ form.subject }} 
+                {% if form.subject.errors %}
+                    <span style="color:red">{{ form.subject.errors[0] }}</span>
+                {% endif %}
+            </p>
+    
+            <p>Year: {{ form.year_level }} 
+                {% if form.year_level.errors %}
+                    <span style="color:red">{{ form.year_level.errors[0] }}</span>
+                {% endif %}
+            </p>
+            
+            <p> {{ form.submit(class_="search-btn") }}</p>
         </form> 
     </div>
 </div>

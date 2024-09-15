@@ -354,6 +354,7 @@
   font-size: 16px;
   cursor: pointer;
   margin-left: 10px;
+  text-decoration: none;
 }
 
 .search-btn:hover {

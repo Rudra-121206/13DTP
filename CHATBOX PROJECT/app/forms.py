@@ -1,74 +1,95 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, TextAreaField, SelectField, EmailField, PasswordField, SubmitField, validators
-from wtforms.validators import DataRequired, Length, NumberRange, EqualTo
+from wtforms import IntegerField, StringField, PasswordField, SubmitField, EmailField
+from wtforms.validators import DataRequired, Length, NumberRange, EqualTo, Email
 import app.models
-from datetime import datetime
 
 
-
-
+# Student registration form with required fields and validation
 class register_student(FlaskForm):
-
-    email = EmailField('Email', [validators.Email(message='please enter a valid email')])
+    email = EmailField('Email', [Email(message='Please enter a valid email.')])
     password = PasswordField('Password', validators=[
-    DataRequired(message='Password is required.'),
-    EqualTo('confirm', message='Passwords must match.'),
-    Length(message='Password must be between 6 and ten characters long.', min=6, max=10),
+        DataRequired(message='Password is required.'),
+        EqualTo('confirm', message='Passwords must match.'),
+        Length(min=6, max=10, message='Password must be between 6 and 10 characters long.')
     ])
-    confirm = PasswordField('Confirm password', validators=[EqualTo('password', message='password does not match')])
-    name = StringField('name', validators=[DataRequired(message='Name is required'), 
-    Length(message='name must be between 2 and 12 characters long', min=2, max=12)])
-    year = IntegerField('Age', validators=[NumberRange(min=5, max=18, message='please enter a digit between 5 and 18'),
-    DataRequired(message='name is required')])
+    confirm = PasswordField('Confirm Password', validators=[
+        EqualTo('password', message='Passwords do not match.')
+    ])
+    name = StringField('Name', validators=[
+        DataRequired(message='Name is required.'),
+        Length(min=2, max=12, message='Name must be between 2 and 12 characters long.')
+    ])
+    year = IntegerField('Age', validators=[
+        NumberRange(min=5, max=18, message='Please enter an age between 5 and 18.'),
+        DataRequired(message='Age is required.')
+    ])
     submit = SubmitField('Register')
 
 
-
+# User login form
 class login(FlaskForm):
-    email = EmailField('Email', [validators.Email(message='please enter a valid email')])
-    password = PasswordField('Password', [
-    validators.DataRequired(message='Password is required.'),
-    validators.Length(min=6, max=10, message='Password must be between 6 and ten characters long.' )])
-    submit = SubmitField('login')
-    
+    email = EmailField('Email', [Email(message='Please enter a valid email.')])
+    password = PasswordField('Password', validators=[
+        DataRequired(message='Password is required.'),
+        Length(min=6, max=10, message='Password must be between 6 and 10 characters long.')
+    ])
+    submit = SubmitField('Login')
 
+
+# Form for enrolling into a course using a course ID and a joining code
 class joining_code(FlaskForm):
-    course=IntegerField(validators=[DataRequired(message='id is required')])
-    joining_code=IntegerField('Enter four digit joining code', [
-        validators.DataRequired(message='data is required'),
-        validators.NumberRange(min=1000, max=9999, message='please enter four digit number')])
-    submit_enroll = SubmitField('join')
+    course = IntegerField(validators=[DataRequired(message='Course ID is required.')])
+    joining_code = IntegerField('Enter four-digit joining code', validators=[
+        DataRequired(message='Joining code is required.'),
+        NumberRange(min=1000, max=9999, message='Please enter a valid four-digit number.')
+    ])
+    submit_enroll = SubmitField('Join')
 
 
+# Form for entering a chat message
 class enter_chat(FlaskForm):
-    chat = StringField('Enter text', [
-        validators.data_required(message="data is required"),
-        validators.Length(message='message must be below 60 characters', min=2, max=60)], 
-        render_kw={"placeholder": "type a message..."})
+    chat = StringField('Enter text', validators=[
+        DataRequired(message='Message is required.'),
+        Length(min=2, max=60, message='Message must be between 2 and 60 characters.')
+    ], render_kw={"placeholder": "Type a message..."})
     submit = SubmitField('Send')
 
 
+# Form for course creation
 class CreateCourseForm(FlaskForm):
-    subject = StringField('Subject', validators=[DataRequired(), Length(min=2, max=100)])
-    year_level = IntegerField('Age', validators=[NumberRange(min=5, max=18, message='please enter a digit between 5 and 18'),
-    DataRequired(message='name is required')])
+    subject = StringField('Subject', validators=[
+        DataRequired(message='Subject is required.'),
+        Length(min=2, max=100, message='Subject must be between 2 and 100 characters long.')
+    ])
+    year_level = IntegerField('Age', validators=[
+        NumberRange(min=5, max=18, message='Please enter an age between 5 and 18.'),
+        DataRequired(message='Year level is required.')
+    ])
     submit = SubmitField('Create Course')
 
 
+# Teacher registration form similar to the student form but without the 'year' field
 class register_teacher(FlaskForm):
-    email = EmailField('Email', [validators.Email(message='please enter a valid email')])
+    email = EmailField('Email', [Email(message='Please enter a valid email.')])
     password = PasswordField('Password', validators=[
-    DataRequired(message='Password is required.'),
-    EqualTo('confirm', message='Passwords must match.'),
-    Length(message='Password must be between 6 and ten characters long.', min=6, max=10),
+        DataRequired(message='Password is required.'),
+        EqualTo('confirm', message='Passwords must match.'),
+        Length(min=6, max=10, message='Password must be between 6 and 10 characters long.')
     ])
-    confirm = PasswordField('Confirm password', validators=[EqualTo('password', message='password does not match')])
-    name = StringField('name', validators=[DataRequired(message='Name is required'),
-    Length(message='name must be between 2 and 12 characters long', min=2, max=12)])
+    confirm = PasswordField('Confirm Password', validators=[
+        EqualTo('password', message='Passwords do not match.')
+    ])
+    name = StringField('Name', validators=[
+        DataRequired(message='Name is required.'),
+        Length(min=2, max=12, message='Name must be between 2 and 12 characters long.')
+    ])
     submit = SubmitField('Register')
 
 
+# Search form for searching classes
 class search(FlaskForm):
-    search = StringField('Enter Text', validators=[DataRequired(), Length(min=2, max=100)],
-                       render_kw={"placeholder": "🔎 Search for a class..."})
-    submit_search = SubmitField("Sumbit")
+    search = StringField('Enter Text', validators=[
+        DataRequired(message='Search term is required.'),
+        Length(min=2, max=100, message='Search term must be between 2 and 100 characters long.')
+    ], render_kw={"placeholder": "🔎 Search for a class..."})
+    submit_search = SubmitField('Submit')

@@ -48,11 +48,3 @@ class Chat(db.Model):
 
     user = db.relationship('User', back_populates='course_chats')
     course = db.relationship('Course', back_populates='people_chats')
-
-
-
-
-
-    
-
-
