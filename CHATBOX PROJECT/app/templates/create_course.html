@@ -6,7 +6,7 @@
             {{ form.csrf_token }}
             <p>Name: {{ form.subject }} <span style="color:red">{{ form.subject.errors }}</span></p>
             <p>Year: {{ form.year_level }} <span style="color:red">{{ form.year_level.errors }}</span></p>
-            <p>submit: {{ form.submit }}</p>
+            <p> {{ form.submit(class_="search-btn") }}</p>
             
         </form> 
     </div>

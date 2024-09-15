@@ -10,6 +10,9 @@
   body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
   }
 
   
@@ -22,6 +25,7 @@
     top: 0; /* Sticks to the top */
     width: 100%; /* Full-width */
     z-index: 1000; /* Ensure it stays on top */
+    position: fixed;
     
   }
   
@@ -56,12 +60,13 @@
   .form {
     width: 350px;
     padding: 20px;
-    background-color: #ffffff;
+    background-color: rgb(72, 11, 196);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     text-align: center;
     position: relative;
     margin-top: 70px; /* Adding margin to account for the top bar */
+    color: white;
     
 }
 
@@ -125,7 +130,7 @@
 
 .form .submit-button {
     font-size: 24px;
-    color: white;
+    color: rgb(153, 59, 59);
 }
 
 .error {
@@ -145,6 +150,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: fixed;
+  
+   
 }
 
 /* Chat Messages */
@@ -214,10 +222,15 @@
 
 /* Input area */
 .input-area {
-  background-color: #00aaff;
-  padding: 10px;
+  background-color: #00aaff; /* Full blue background */
   display: flex;
+  padding: 10px;
   align-items: center;
+  width: 100vw; /* Full width of the viewport */
+  margin: 0; /* Remove margins */
+  position: fixed; /* Fix to the bottom of the screen */
+  bottom: 0; /* Stick to the bottom */
+  left: 0;
 }
 
 .input-area input[type="text"] {
@@ -239,11 +252,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 10px;
 }
 
 .input-area button img {
-  width: 20px;
-  height: 20px;
+  width: 100%; /* Ensure the image scales within the button */
+  max-width: 40px; /* Set max-width to control image size */
+  height: auto; /* Auto height for proper aspect ratio */
+  object-fit: contain;
+  
 }
 
 .grid-container {
@@ -271,7 +288,6 @@
 .item {
   position: relative;
   padding: 20px;
-  background-image: url('brush-stroke.png'); /* Assuming brush-stroke.png is the background image */
   background-size: cover;
   background-position: center;
   border-radius: 10px;
@@ -317,7 +333,7 @@
 
 .search-bar {
   text-align: center;
-  margin-bottom: 20px;
+  margin-top: 30px;
 }
 
 .search-field {
@@ -326,6 +342,7 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  size: 40;
 }
 
 .search-btn {
@@ -405,3 +422,111 @@
   color: red;
   font-size: 1.5em;
 }
+
+
+.content-wrapper {
+  min-height: 100vh; /* Ensures this div stretches the full viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Let content take its natural height */
+  overflow: visible; /* Ensure scrolling works when content overflows */
+  flex: 1 0 auto; /* Let the content grow and shrink as necessary */
+  overflow-y: auto; /* Allow vertical scrolling */
+}
+
+/* Add padding and margins as needed for the content */
+.content-wrapper > * {
+  padding: 10px;
+}
+
+
+/* Footer stays at the bottom of the page even if content is short */
+footer {
+  background-color: #333;
+  color: white;
+   
+  text-align: center;
+  margin-top: auto; /* Push footer to bottom */
+}
+
+.image-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.img-section img{
+  width:70%;
+  max-width: 400px;
+}
+
+.content-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
+  color: white;
+  border-radius: 10px;
+  background-color: rgba(0, 173, 239, 0.5); /* Semi-transparent blue background */
+}  
+
+.description{
+  font-size: 1.20em;
+  margin-bottom: 20px;
+
+}
+
+.buttons{
+  display:flex;
+  flex-direction: column;
+}
+
+.register-btn{
+  background-color: #00bfff;
+  color: white;
+  padding: 10px 20px;
+  text-decoration:none;
+  border-radius: 5px;
+  margin-top: 10px;
+  text-align: center;
+
+}
+
+.register-btn:hover{
+  background-color: #008cba; /* Darker blue on hover */
+  cursor: pointer;
+}
+
+.home{
+  display: flex;
+  height: 100vh; /* Full screen height */
+  align-items: center; /* Center content vertically */
+  justify-content: space-between; /* Space between the image and content */
+  padding: 20px;
+
+}
+
+@media (max-width: 768px){
+  /* Stack content on smaller screens */
+  .container {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .content-section {
+      width: 100%;
+      text-align: center;
+      align-items: center;
+  }
+
+  .buttons {
+      width: 100%;
+  }
+}  
+
+ 

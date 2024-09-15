@@ -3,7 +3,7 @@
 <html> <!-- your html should be wrapped in html tags -->
 
   <head> <!-- stuff thats not visible on page -->
-    <title>Example Site - {{page_title}}</title>
+    <title>Chatroom - {{page_title}}</title>
     <link rel="stylesheet" href="/static/css/style.css">
   </head>
 
@@ -29,12 +29,10 @@
     <div class="nav">
       {% include 'nav.html' %}
     </div>
-    {% block content %}
-
-
-    
-   
-    {% endblock %}
+    <div class="content-wrapper">
+      {% block content %}
+      {% endblock %}
+    </div>
     {% include 'footer.html' %}
     <script src="/static/notifications.js"></script>
   </body>

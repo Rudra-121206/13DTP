@@ -29,6 +29,12 @@ def load_user(User_id):
 import app.models as models
 from app import forms
 
+
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+
 @app.route('/all_courses/<int:ref>', methods=['GET', 'POST'])
 def all_courses(ref):
     if not current_user.is_authenticated:
@@ -61,15 +67,15 @@ def all_courses(ref):
 
                     if user and course:
                         if course in user.courses:
-                            flash('You are already enrolled in this course')
+                            flash('You are already enrolled in this course', 'warning')
                         else:
                             user.courses.append(course)
                             db.session.add(user)
                             db.session.commit()
-                            flash(f"User {user.name} has been enrolled in the course")
+                            flash(f"User {user.name} has been enrolled in the course", 'success')
                         return redirect(url_for('my_courses', ref=ref))
                 else:
-                    flash("Invalid course ID or joining code, please try again.")
+                    flash("Invalid course ID or joining code, please try again.", 'error')
             elif 'submit_search' in request.form and search_form.validate_on_submit():
             
                 search_query = search_form.search.data
@@ -91,17 +97,26 @@ def create_acc():
         return render_template('create_acc_student.html', form=form, title='Create an account(student)')
     else:
         if form.validate_on_submit():
-            
-            new_user = models.User()
-            new_user.role = "student"
-            new_user.name = form.name.data
-            new_user.email = form.email.data
-            new_user.password = generate_password_hash(form.password.data)
-            new_user.year_level = form.year.data
-            db.session.add(new_user)
-            db.session.commit()
-            flash('login with your details')
-            return redirect(url_for('my_courses', ref=new_user.id))
+            # Check if the email is already in use
+            existing_user = models.User.query.filter_by(email=form.email.data).first()
+            if existing_user:
+                flash('Email already in use. Please choose a different one.', 'error')
+                return redirect(url_for('create_acc'))
+            # Adding new user
+            else:
+                new_user = models.User()
+                new_user.role = "student"
+                new_user.name = form.name.data
+                new_user.email = form.email.data
+                new_user.password = generate_password_hash(form.password.data)
+                new_user.year_level = form.year.data
+                db.session.add(new_user)
+                db.session.commit()
+                flash('Account created successfully! Please log in with your details.', 'success')
+                return redirect(url_for('my_courses', ref=new_user.id))
+        else:
+            flash("incorrect information in form", "error")
+            return render_template('create_acc_student.html', form=form, title='Create an account (student)')    
 
 @app.route("/create_acc_teacher", methods=['GET', 'POST'])
 def create_acc_teacher():

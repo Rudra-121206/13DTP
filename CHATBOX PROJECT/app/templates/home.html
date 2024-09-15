@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block content %} 
+<div class="home">
+    <div class="image-section">
+        <img src="/static/images/bg.png" alt="student_teacher png">
+    </div>
+    <div class="content-section">
+        <p class="description">
+            A school chatroom offers a platform for students to communicate and collaborate outside of class. 
+            It helps clarify concepts through peer discussions and resource sharing. The chatroom also supports 
+            group projects and builds a sense of community. Overall, it enhances learning by making it more 
+            interactive and accessible.
+        </p>
+        <div class="buttons">
+            <a href="/login" class="register-btn">LOGIN 🔒</a>
+            <a href="/create_acc_student" class="register-btn">Register Student</a>
+            <a href="/create_acc_teacher" class="register-btn">Register Teacher</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -4,7 +4,7 @@
 <div class="search-bar">
     <form method="POST" action="{{ url_for('all_courses', ref=current_user.id) }}">
         {{ search_form.csrf_token }}
-        {{ search_form.search(size=40, class_="search-field") }}
+        {{ search_form.search(class_="search-field") }}
         {{ search_form.submit_search(class_="search-btn") }}
     </form>
 </div>
@@ -15,11 +15,23 @@
             <form method="POST" enctype="multipart/form-data">
             
                 {{ form.csrf_token }}
-        
                 <p>{{ course.subject }}</p>
-                <p>course id:{{ form.course }}<span style="color:red">{{ form.joining_code.errors }}</span></p>
-                <p>Joining cdoe:{{ form.joining_code }} <span style="color:red">{{ form.joining_code.errors }}</span></p>
-                <p>submit: {{ form.submit_enroll }}</p>
+                <p>
+                    course id: {{ form.course }}
+                    {% if form.course.errors %}
+                        <span style="color:red">{{ form.course.errors[0] }}</span>
+                    {% endif %}
+                </p>
+                
+                <p>
+                    Joining code: {{ form.joining_code }}
+                    {% if form.joining_code.errors %}
+                        <span style="color:red">{{ form.joining_code.errors[0] }}</span>
+                    {% endif %}
+                </p>
+                
+                <p>{{ form.submit_enroll(class_="search-btn") }}</p>
+
             </form> 
         </div>
     {% endfor %}  

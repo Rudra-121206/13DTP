@@ -1,17 +1,22 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="grid-container">
-    {% for course in course_user %}
-    <div class="item">  
-        {% if current_user.has_role('teacher') %}
-            <a href="/delete_course/{{current_user.id}}/{{course.id}}">delete course</a>
-            <a href="/chats/{{current_user.id}}/{{course.id}}">{{ course.subject }} </a>
-            <p> Course ID:{{course.id}}</p>
-            <p> Course joining Code:{{course.joining_code}}</p>
-        {% else %}
-            <a href="/chats/{{current_user.id}}/{{course.id}}">{{ course.subject }} </a>
-        {% endif %}
-    </div> 
-    {% endfor %}
+    {% if course_user|length == 0 %}
+        <p>You are not enrolled in any courses.</p>
+        <a href="/all_courses/{{ current_user.id }}">Browse available courses</a>
+    {% else %}
+        {% for course in course_user %}
+        <div class="item">  
+            {% if current_user.has_role('teacher') %}
+                <a href="/delete_course/{{current_user.id}}/{{course.id}}">delete course</a>
+                <a href="/chats/{{current_user.id}}/{{course.id}}">{{ course.subject }} </a>
+                <p> Course ID:{{course.id}}</p>
+                <p> Course joining Code:{{course.joining_code}}</p>
+            {% else %}
+                <a href="/chats/{{current_user.id}}/{{course.id}}">{{ course.subject }} </a>
+            {% endif %}
+        </div> 
+        {% endfor %}
+    {% endif %}    
 </div>
 {% endblock %}   
