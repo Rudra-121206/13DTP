@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
     <div class="form">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" novalidate>
             {{ form.csrf_token }}
             
             <p>Name: {{ form.subject }} 

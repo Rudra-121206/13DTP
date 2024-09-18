@@ -12,7 +12,7 @@
 <div class="grid-container">
     {% for course in all_courses %}
         <div class="form">
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" novalidate>
             
                 {{ form.csrf_token }}
                 <p>{{ course.subject }}</p>

@@ -40,7 +40,7 @@ class login(FlaskForm):
 class joining_code(FlaskForm):
     course = IntegerField(validators=[DataRequired(message='Course ID is required.')])
     joining_code = IntegerField('Enter four-digit joining code', validators=[
-        DataRequired(message='Joining code is required.'),
+        DataRequired(message='Please enter a valid four-digit number.'),
         NumberRange(min=1000, max=9999, message='Please enter a valid four-digit number.')
     ])
     submit_enroll = SubmitField('Join')

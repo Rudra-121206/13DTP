@@ -19,7 +19,7 @@
 <div class="chat-container">
     <div class="chat-window" id="chat-window">
         {% for chat in chats %}
-        <div class="message {% if chat.person_id == current_user.id %}user{% endif %}">
+        <div class="message {% if chat.user_id == current_user.id %}user{% endif %}">
             <p class="username">{{ name[loop.index0] }}</p>
             <p>{{ chat.chat_content }}</p>
             <p class="timestamp">{{ chat.timestamp }}</p>
@@ -34,7 +34,7 @@
     
         <!-- Render the submit button with an icon -->
         <button type="submit">
-            <img src="/static/send-button.png" alt="Send">
+            <img src="/static/images/send-button.png" alt="Send">
         </button>
     </form>
 </div>

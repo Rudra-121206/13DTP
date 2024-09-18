@@ -1,10 +1,10 @@
 from app.routes import db
 from flask_login import UserMixin
 
-Enrolement = db.Table('Enrolement', 
-    db.Column('person_id', db.Integer, db.ForeignKey('User.id')),
+Enrolement = db.Table('Enrolement',
+    db.Column('user_id', db.Integer, db.ForeignKey('User.id')),
     db.Column('course_id', db.Integer, db.ForeignKey('Course.id'))
-) 
+)
 
 
 class User(UserMixin, db.Model):
@@ -40,7 +40,7 @@ class Course(db.Model):
 class Chat(db.Model):
     __tablename__ = "Chat"
     chat_id = db.Column(db.Integer, primary_key=True)
-    person_id = db.Column(db.Integer, db.ForeignKey("User.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("User.id"))
     course_id = db.Column(db.Integer, db.ForeignKey("Course.id"))
     chat_content = db.Column(db.Text())
     chat_status = db.Column(db.Text())
