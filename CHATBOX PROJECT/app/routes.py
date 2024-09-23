@@ -42,67 +42,63 @@ def home():
 # Route for displaying all courses for a specific user
 @app.route('/all_courses/<int:ref>', methods=['GET', 'POST'])
 def all_courses(ref):
-    # Check if the user is authenticated
     if not current_user.is_authenticated:
         flash('User is not authenticated')
         return redirect(url_for('login'))
 
-    # check if the user url is correct
-    elif current_user.id != ref:
-        flash('Unauthorised access', 'error')
+    if current_user.id != ref:
+        flash('Unauthorized access', 'error')
         return redirect(url_for('home'))
 
-    # Check if the user is a teacher
-    elif current_user.has_role('teacher'):
+    if current_user.has_role('teacher'):
         flash('User access invalid')
         return redirect(url_for('create_course'))
 
+    search_form = forms.search()
+    search_query = request.args.get('search')
+
+    if search_query:
+        all_courses = models.Course.query.filter(models.Course.subject.like(f'%{search_query}%')).all()
     else:
-        form = forms.joining_code()  # Form for joining courses
-        search_form = forms.search()  # Search form
-        search_query = request.args.get('search')  # Get search query from the request
+        all_courses = models.Course.query.all()
 
-        # Filter courses based on search query
-        if search_query:
-            all_courses = models.Course.query.filter(models.Course.subject.like(f'%{search_query}%')).all()
-        else:
-            all_courses = models.Course.query.all()  # Fetch all courses if no search query
+    # Create a list of forms, one for each course
+    enroll_forms = [forms.EnrollForm() for _ in all_courses]
 
-        # Handle POST request for course enrollment
-        if request.method == 'POST':
-            if 'submit_enroll' in request.form and form.validate_on_submit():
-                course = models.Course.query.filter_by(id=form.course.data).first()
+    if request.method == 'POST':
+        # Get the course ID from the submitted form
+        course_id = request.form.get('submit_enroll')  # Get the value of the clicked submit button
 
-                # Check if the course and joining code are valid
-                if course and form.joining_code.data == course.joining_code:
-                    user = models.User.query.get(ref)
-                    course = models.Course.query.get(form.course.data)
+        # Find the corresponding form
+        for i, enroll_form in enumerate(enroll_forms):
+            if course_id == str(all_courses[i].id) and enroll_form.validate_on_submit():
+                joining_code_input = enroll_form.joining_code.data
+                course_id = enroll_form.course_id.data
+                print(joining_code_input)
+                print(course_id)
+                course = models.Course.query.get(course_id)
 
-                    # Check if the user and course exist
-                    if user and course:
-                        if course in user.courses:
-                            flash('You are already enrolled in this course', 'warning')
-                        else:
-                            user.courses.append(course)
-                            db.session.add(user)
-                            db.session.commit()
-                            flash(f"User {user.name} has been enrolled in the course", 'success')
-                        return redirect(url_for('my_courses', ref=ref))
+                if not course:
+                    flash(f"Course with ID {course_id} not found.", 'error')
+                    return redirect(url_for('all_courses', ref=ref))
 
+                if joining_code_input != course.joining_code:
+                    flash(f"Invalid joining code for course: {course.subject}", 'error')
+                    return redirect(url_for('all_courses', ref=ref))
+
+                user = models.User.query.get(ref)
+                if course in user.courses:
+                    flash('You are already enrolled in this course', 'warning')
                 else:
-                    flash("Invalid course ID or joining code, please try again.", 'error')
-
-            # Handle search form submission
-            elif 'submit_search' in request.form and search_form.validate_on_submit():
-                search_query = search_form.search.data
-                all_courses = models.Course.query.filter(models.Course.subject.like(f'%{search_query}%')).all()
-                if all_courses is None:
-                    flash("So sorry we can't find what you're looking for", 'error')
-
-        # Render the page with the list of filtered courses
-        return render_template('all_courses.html', form=form, search_form=search_form, all_courses=all_courses)
-
-
+                    user.courses.append(course)
+                    db.session.add(user)
+                    db.session.commit()
+                    flash(f"Successfully enrolled in {course.subject}", 'success')
+                return redirect(url_for('my_courses', ref=ref))
+            else:
+                flash('invalid input', 'error')
+                 
+    return render_template('all_courses.html', all_courses=all_courses, enroll_forms=enroll_forms, search_form=search_form, zip=zip)
 # Route to create a student account
 @app.route("/create_acc_student", methods=['GET', 'POST'])
 def create_acc():
@@ -152,7 +148,11 @@ def create_acc_teacher():
         return redirect(url_for('my_courses', ref=current_user.id))
 
     if request.method == 'POST':
-        if form.validate_on_submit():  # This will check if the form submission is valid
+        if form.validate_on_submit():  # Check if form is valid
+            existing_user = models.User.query.filter_by(email=form.email.data).first()
+            if existing_user:
+                flash('Email already in use. Please choose a different one.', 'error')
+                return redirect(url_for('create_acc'))
             new_user = models.User()
             new_user.role = "teacher"
             new_user.name = form.name.data

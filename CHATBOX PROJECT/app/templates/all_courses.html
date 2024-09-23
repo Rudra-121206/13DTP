@@ -10,31 +10,31 @@
 </div>
 
 <div class="grid-container">
-    {% for course in all_courses %}
+    {% for course, enroll_form in zip(all_courses, enroll_forms) %}
         <div class="form">
             <form method="POST" enctype="multipart/form-data" novalidate>
-            
-                {{ form.csrf_token }}
-                <p>{{ course.subject }}</p>
-                <p>
-                    course id: {{ form.course }}
-                    {% if form.course.errors %}
-                        <span style="color:red">{{ form.course.errors[0] }}</span>
-                    {% endif %}
-                </p>
+                {{ enroll_form.csrf_token }}
                 
-                <p>
-                    Joining code: {{ form.joining_code }}
-                    {% if form.joining_code.errors %}
-                        <span style="color:red">{{ form.joining_code.errors[0] }}</span>
-                    {% endif %}
-                </p>
-                
-                <p>{{ form.submit_enroll(class_="search-btn") }}</p>
+                <p>Course Name: {{ course.subject }}</p>
 
-            </form> 
+                <p>
+                    Course ID: {{ enroll_form.course_id(value=None)}}
+                    {% if enroll_form.course_id.errors %}
+                        <span style="color:red">{{ enroll_form.course_id.errors[0] }}</span>
+                    {% endif %}
+                </p>
+
+                <p>
+                    Joining Code: {{ enroll_form.joining_code(value=None) }}
+                    {% if enroll_form.joining_code.errors %}
+                        <span style="color:red">{{ enroll_form.joining_code.errors[0] }}</span>
+                    {% endif %}
+                </p>
+                
+                <p>{{ enroll_form.submit_enroll(class_="search-btn", value="course.id") }}</p>
+            </form>
         </div>
-    {% endfor %}  
+    {% endfor %}
 </div>
  
 {% endblock %}

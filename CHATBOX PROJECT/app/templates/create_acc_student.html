@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="container">
-    <div class="form">
+    <div class="form form-white-bg">
         <form method="POST" enctype="multipart/form-data" novalidate>
             {{ form.csrf_token }}
             <p>Name: {{ form.name }}</p>

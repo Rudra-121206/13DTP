@@ -2,8 +2,13 @@
 {% block content %}
 <div class="grid-container">
     {% if course_user|length == 0 %}
-        <p>You are not enrolled in any courses.</p>
-        <a href="/all_courses/{{ current_user.id }}">Browse available courses</a>
+        {% if current_user.has_role('teacher') %}
+            <p>you have not created any courses</p>
+            <a href="/create_course" class="search-btn">create a course</a>
+        {% else %}
+            <p>You are not enrolled in any courses.</p>
+            <a href="/all_courses/{{ current_user.id }}" class="search-btn">Browse available courses</a>
+        {% endif %}
     {% else %}
         {% for course in course_user %}
         <div class="item">  
