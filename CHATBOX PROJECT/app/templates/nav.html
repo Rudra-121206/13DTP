@@ -4,8 +4,7 @@
             {% if current_user.has_role('teacher') %}
                 <ul>
 
-                    <li><a href="/my_courses/{{current_user.id}}">my_courses</a></li>
-                    
+                    <li><a href="/my_courses/{{current_user.id}}">my courses</a></li>
                     <li><a href="/create_course">create course</a></li>
                     <li><a href="/logout">logout</a></li>
                 </ul>

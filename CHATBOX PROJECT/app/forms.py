@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, PasswordField, SubmitField, EmailField
+from wtforms import IntegerField, StringField, PasswordField, SubmitField, EmailField, HiddenField
 from wtforms.validators import DataRequired, Length, NumberRange, EqualTo, Email
 import app.models
 
@@ -38,7 +38,7 @@ class login(FlaskForm):
 
 # Form for enrolling into a course using a course ID and a joining code
 class EnrollForm(FlaskForm):
-    course_id = IntegerField(validators=[DataRequired(message='Course ID is required.')])
+    course_id = HiddenField('Course ID')
     joining_code = IntegerField('Enter four-digit joining code', validators=[
         DataRequired(message='Please enter a valid four-digit number.'),
         NumberRange(min=1000, max=9999, message='Please enter a valid four-digit number.')
@@ -87,7 +87,7 @@ class register_teacher(FlaskForm):
 
 
 # Search form for searching classes
-class search(FlaskForm):
+class SearchForm(FlaskForm):
     search = StringField('Enter Text', validators=[
         DataRequired(message='Search term is required.'),
         Length(min=2, max=100, message='Search term must be between 2 and 100 characters long.')

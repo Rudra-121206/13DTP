@@ -2,7 +2,7 @@
 {% block content %} 
 
 <div class="search-bar">
-    <form method="POST" action="{{ url_for('all_courses', ref=current_user.id) }}">
+    <form method="GET" action="{{ url_for('all_courses', ref=current_user.id) }}">
         {{ search_form.csrf_token }}
         {{ search_form.search(class_="search-field") }}
         {{ search_form.submit_search(class_="search-btn") }}
@@ -15,23 +15,23 @@
             <form method="POST" enctype="multipart/form-data" novalidate>
                 {{ enroll_form.csrf_token }}
                 
+                <!-- Hidden field for Course ID -->
+                {{ enroll_form.course_id(value=course.id) }}
+            
                 <p>Course Name: {{ course.subject }}</p>
-
+            
                 <p>
-                    Course ID: {{ enroll_form.course_id(value=None)}}
-                    {% if enroll_form.course_id.errors %}
-                        <span style="color:red">{{ enroll_form.course_id.errors[0] }}</span>
-                    {% endif %}
-                </p>
-
-                <p>
-                    Joining Code: {{ enroll_form.joining_code(value=None) }}
+                    Joining Code: {{ enroll_form.joining_code }}
                     {% if enroll_form.joining_code.errors %}
                         <span style="color:red">{{ enroll_form.joining_code.errors[0] }}</span>
                     {% endif %}
                 </p>
                 
-                <p>{{ enroll_form.submit_enroll(class_="search-btn", value="course.id") }}</p>
+                <!-- Dynamically update button value with the course ID and subject -->
+                <p>
+                    {{ enroll_form.submit_enroll(class_="search-btn") }} 
+                    <span>Enroll in {{ course.subject }}</span>
+                </p>
             </form>
         </div>
     {% endfor %}
