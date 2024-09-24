@@ -1,9 +1,11 @@
 from app import app
-from flask import render_template, abort, redirect, request, url_for, flash, jsonify
+from flask import render_template, redirect, request, url_for, \
+    flash, jsonify
 from flask_sqlalchemy import SQLAlchemy  # Using SQLAlchemy for ORM functionality
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, current_user, LoginManager, UserMixin, logout_user, login_required
+from flask_login import login_user, current_user, LoginManager, \
+    UserMixin, logout_user
 from datetime import datetime
 import random
 
@@ -144,6 +146,36 @@ def create_acc_teacher():
             flash('Errors have occurred in form submission.', 'error')
 
     return render_template('create_acc_teacher.html', form=form, title='Create an account (teacher)')
+
+#create a student account different from teacher as year field is present
+@app.route("/create_acc_student", methods=['GET', 'POST'])
+def create_acc_student():
+    form = forms.register_student()
+
+    if current_user.is_authenticated:
+        flash('User is already logged in')
+        return redirect(url_for('my_courses', ref=current_user.id))
+
+    if request.method == 'POST':
+        if form.validate_on_submit():  # Check if form is valid
+            existing_user = models.User.query.filter_by(email=form.email.data).first()
+            if existing_user:
+                flash('Email already in use. Please choose a different one.', 'error')
+                return redirect(url_for('create_acc_student'))
+            new_user = models.User()
+            new_user.role = "student"
+            new_user.year_level = form.year.data
+            new_user.name = form.name.data
+            new_user.email = form.email.data
+            new_user.password = generate_password_hash(form.password.data)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Account created successfully! Please login with your new details.', 'success')
+            return redirect(url_for('login'))  # Redirect to login page for new user to login
+        else:
+            flash('Errors have occurred in form submission.', 'error')
+
+    return render_template('create_acc_student.html', form=form, title='Create an account (teacher)')
 # Route for user login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -208,7 +240,7 @@ def not_found_error(error):
 def chats(ref, course_id):
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
- 
+
     # Ensure that the user is enrolled in the course
     course = models.Course.query.get(course_id)
     if not course or current_user not in course.people:
@@ -218,7 +250,7 @@ def chats(ref, course_id):
     # Redirect to homepage if not authorized
 
     chats = models.Chat.query.filter_by(course_id=course_id).all()
-  
+
     # Fetch the names of users participating in the chat
     name = []
     for chat in chats:
@@ -226,21 +258,23 @@ def chats(ref, course_id):
         name.append(user.name) if user else name.append('Unknown User')
 
     form = forms.enter_chat()
- 
-    if form.validate_on_submit():  # Check if the form was submitted and valid
-        new_chat = models.Chat(
-            course_id=course_id,
-            user_id=ref,
-            chat_content=form.chat.data,
-            chat_status="unread",
-            timestamp=datetime.now()
-        )
-        db.session.add(new_chat)
-        db.session.commit()
+    if request.method == 'POST':
+        if form.validate_on_submit():  # Check if the form was submitted and valid
+            new_chat = models.Chat(
+                course_id=course_id,
+                user_id=ref,
+                chat_content=form.chat.data,
+                chat_status="unread",
+                timestamp=datetime.now()
+            )
+            db.session.add(new_chat)
+            db.session.commit()
 
-        return redirect(url_for("chats", ref=ref, course_id=course_id))
-
-    return render_template('chats.html', form=form, chats=chats, name=name, course_id=course_id)
+            return redirect(url_for("chats", ref=ref, course_id=course_id))
+        else:
+            flash('please enter text between 2 and 60 char', 'error')
+    return render_template('chats.html', form=form, chats=chats, name=name,
+                           course_id=course_id)
 
 
 # Route to create a new course (teachers only)
@@ -361,4 +395,40 @@ def delete_course(ref, course_id):
     else:
         flash('Student access unauthorized', 'error')
         return redirect(url_for('my_courses', ref=ref))
-    
+
+
+# leave course
+@app.route('/leave_course/<int:ref>/<int:course_id>')
+def leave_course(ref, course_id):
+
+    if not current_user.is_authenticated:
+        flash('You must be logged in to leave a course', 'error')
+        return redirect(url_for('login'))
+    elif current_user.id != ref:
+        flash('Unauthorized access', 'error')
+        return redirect(url_for('home'))
+    elif current_user.has_role('teacher'):
+        return redirect(url_for('my_courses', ref=ref))
+    # Find the course the user wants to leave
+    course = models.Course.query.get(course_id)
+
+    if not course:
+        flash('Course not found', 'error')
+        return redirect(url_for('all_courses', ref=current_user.id))
+
+    # Check if the user is enrolled in the course
+    if course not in current_user.courses:
+        flash('You are not enrolled in this course', 'error')
+        return redirect(url_for('all_courses', ref=current_user.id))
+
+    # Remove the course from the user's courses
+    current_user.courses.remove(course)
+
+    try:
+        db.session.commit()
+        flash(f'You have successfully left the course: {course.subject}', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('An error occurred while leaving the course', 'error')
+
+    return redirect(url_for('my_courses', ref=current_user.id))

@@ -142,6 +142,7 @@
   border-color: red;
 }
 
+/* white background for certain forms */
 .form-white-bg {
   background-color: white;
   color: black;
@@ -150,65 +151,70 @@
 /* Chat Container */
 .chat-container {
   width: 100%;
-  height: 600px;
+  max-width: 100vw; /* Prevent overflow */
+  height: calc(100vh - 80px); /* Adjust based on the input area height */
   background-color: #ffffff;
   border: 2px solid #00aaff;
-  border-radius: 15px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: fixed;
-  
-   
+  top: 0;
 }
 
 /* Chat Messages */
 .chat-window {
-  flex: 1;
+  flex: 1; /* Expands the chat window to take up all available vertical space between other elements */
   padding: 1%;
   background-color: #fff;
-  overflow-y: auto;
+  overflow-y: auto; /* lets user scroll through the chats*/
   display: flex;
   flex-direction: column;
+  padding-top: 50px; /* so you can see messages from the navbar */
+  padding-bottom: 10px; /* Space for input area */
 }
 
-.message {
+/* All messages */
+.message, .message.user {
   display: inline-block;
-  max-width: 70%;
+  width: fit-content; /* Make both the main and user messages the same width */
   margin-bottom: 10px;
   padding: 10px;
-  background-color: #ff4b4b;
+  background-color: #ff4b4b; /* Default for main message */
   color: #ffffff;
   border-radius: 15px;
   position: relative;
-  font-size: 200%;
+  font-size: 1.5rem; /* Responsive text size */
   line-height: 1.5;
   border-left: none;
+  word-wrap: break-word; /* Ensure long words don't break layout */
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
 }
 
+/* User messages (override default background) */
+.message.user {
+  align-self: flex-end;
+  background-color: #6a00ff; /* Different background for user */
+}
+
+/* Message arrow/beak for main chat */
 .message:before {
   content: '';
   display: inline-block;
-  position: absolute;
-  left: -10px;
-  top: 10px;
-  width: 0;
-  height: 0;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-right: 10px solid #ff4b4b;
-  
+  position: absolute;   
+  left: -10px; /* makes the arrow ten to the left*/
+  top: 10px; /* makes the arrow ten pixels from the top of msg box*/
+  width: 0; /* makes the arrow into a beak */
+  height: 0; /* makes the arrow into a beak*/
+  border-top: 10px solid transparent; /*Creates the top part of the triangle (transparent) */
+  border-bottom: 10px solid transparent; /* Creates the bottom part of the triangle (transparent) */
+  border-right: 10px solid #ff4b4b; /* Creates the actual arrow (red) pointing left */
 }
 
-/* Align messages to the right for user */
-.message.user {
-  align-self: flex-end;
-  background-color: #6a00ff;
-}
-
+/* User message arrow/beak */
 .message.user:before {
-  left: auto;
+  left: auto; /* same styling as above but this overrides the above styling so changes the colour and position*/
   right: -10px;
   border-right: none;
   border-left: 10px solid #6a00ff;
@@ -219,32 +225,37 @@
   margin: 0;
 }
 
+/* Username */
 .message .username {
   font-weight: bold;
-  font-size: 12px;
+  font-size: 0.9rem;
   margin-bottom: 5px;
 }
 
+/* Timestamp */
 .message .timestamp {
-  font-size: 10px;
+  font-size: 0.8rem;
   text-align: right;
   color: #ccc;
   margin-top: 5px;
 }
 
-/* Input area */
+/* Input Area */
 .input-area {
-  background-color: #00aaff; /* Full blue background */
+  background-color: #00aaff;
   display: flex;
   padding: 10px;
   align-items: center;
-  width: 100vw; /* Full width of the viewport */
-  margin: 0; /* Remove margins */
-  position: fixed; /* Fix to the bottom of the screen */
-  bottom: 0; /* Stick to the bottom */
+  width: 100vw; /* takes up full vieport*/
+  margin: 0;
+  position: fixed;
+  bottom: 0;
   left: 0;
+  box-sizing: border-box; /* Ensure padding does not cause overflow */
+  height: 80px; /* Fixed height for the input area */
 }
 
+/* Input field */
 .input-area input[type="text"] {
   width: 100%;
   padding: 10px;
@@ -255,6 +266,7 @@
   font-size: 14px;
 }
 
+/* Submit Button */
 .input-area button {
   background-color: #004c6d;
   border: none;
@@ -268,12 +280,32 @@
 }
 
 .input-area button img {
-  width: 100%; /* Ensure the image scales within the button */
-  max-width: 40px; /* Set max-width to control image size */
-  height: auto; /* Auto height for proper aspect ratio */
+  width: 100%;
+  max-width: 40px;
+  height: auto;
   object-fit: contain;
+  background-color: #004c6d;
+  border-radius: 50%;
+  border:none;
   
 }
+
+/* Media Queries for smaller screens */
+@media (max-width: 768px) {
+  .chat-container {
+    height: calc(100vh - 100px); /* subtracts 100px from teh full height cos other aspects ie navbar footer take up 100px */
+  }
+
+  .message {
+    max-width: 90%;
+    font-size: 1.2rem; /* Smaller text for small screens */
+  }
+
+  .input-area {
+    height: 60px;
+  }
+}
+
 
 .grid-container {
   display: grid;
@@ -329,7 +361,8 @@
 }
 
 /* Teacher Specific Links */
-.item a[href*="delete_course"] {
+.item a[href*="delete_course"],
+.item a[href*="leave_course"] {
   position: absolute;
   top: 10px;
   right: 10px;

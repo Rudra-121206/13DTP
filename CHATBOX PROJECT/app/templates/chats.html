@@ -26,7 +26,7 @@
         </div>
         {% endfor %}
     </div>
-    <form method="POST" class="input-area">
+    <form method="POST" class="input-area" novalidate>
         {{ form.hidden_tag() }}  <!-- Renders the CSRF token -->
     
         <!-- Render the chat input field with a placeholder -->
@@ -34,7 +34,7 @@
     
         <!-- Render the submit button with an icon -->
         <button type="submit">
-            <img src="/static/images/send-button.png" alt="Send">
+            <img src="/static/images/send-button.jpg" alt="Send">
         </button>
     </form>
 </div>

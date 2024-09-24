@@ -16,8 +16,10 @@ class User(UserMixin, db.Model):
     role = db.Column(db.Text())
     year_level = db.Column(db.Text())
 
-    course_chats = db.relationship("Chat", back_populates="user", cascade="all, delete-orphan")
-    courses = db.relationship("Course", secondary="Enrolement", back_populates='people')
+    course_chats = db.relationship("Chat", back_populates="user",
+                                   cascade="all, delete-orphan")
+    courses = db.relationship("Course", secondary="Enrolement",
+                              back_populates='people')
 
     def get_id(self):
         return str(self.id)
@@ -33,8 +35,10 @@ class Course(db.Model):
     subject = db.Column(db.Text())
     year_level = db.Column(db.Text())
 
-    people_chats = db.relationship("Chat", back_populates="course", cascade="all, delete-orphan")
-    people = db.relationship("User", secondary="Enrolement", back_populates="courses")
+    people_chats = db.relationship("Chat", back_populates="course",
+                                   cascade="all, delete-orphan")
+    people = db.relationship("User", secondary="Enrolement",
+                             back_populates="courses")
 
 
 class Chat(db.Model):

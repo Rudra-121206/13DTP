@@ -19,6 +19,7 @@
                 <p> Course joining Code:{{course.joining_code}}</p>
             {% else %}
                 <a href="/chats/{{current_user.id}}/{{course.id}}">{{ course.subject }} </a>
+                <a href="/leave_course/{{current_user.id}}/{{course.id}}">leave🚪</a>
             {% endif %}
         </div> 
         {% endfor %}
