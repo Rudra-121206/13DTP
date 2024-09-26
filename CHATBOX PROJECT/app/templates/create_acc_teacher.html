@@ -4,6 +4,7 @@
     <div class="form form-white-bg">
         <form method="POST" enctype="multipart/form-data" novalidate>
             {{ form.csrf_token }}
+            <h1>register teacher</h1>
             <p>Name: {{ form.name }}</p>
             {% if form.name.errors %}
                 <span style="color:red">{{ form.name.errors[0] }}</span>

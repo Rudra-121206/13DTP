@@ -5,7 +5,7 @@
         <form method="post" enctype="multipart/form-data" novalidate>
             {{ form.csrf_token }}
             <img src="/static/images/login img.png" alt="LOGIN IMAGE">
-
+            <h1>login</h1>
             <p>Email: {{ form.email }}</p>
             {% if form.email.errors %}
                 <span style="color:red">{{ form.email.errors[0] }}</span>

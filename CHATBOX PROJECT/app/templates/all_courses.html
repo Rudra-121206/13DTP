@@ -2,7 +2,7 @@
 {% block content %} 
 
 <div class="search-bar">
-    <form method="GET" action="{{ url_for('all_courses', ref=current_user.id) }}">
+    <form method="POST" novalidate>
         {{ search_form.csrf_token }}
         {{ search_form.search(class_="search-field") }}
         {{ search_form.submit_search(class_="search-btn") }}
@@ -15,7 +15,7 @@
             <form method="POST" enctype="multipart/form-data" novalidate>
                 {{ enroll_form.csrf_token }}
                 
-                <!-- Hidden field for Course ID -->
+                <!-- Hidden field for Course ID  so each form knows the  id of the id of the course-->
                 {{ enroll_form.course_id(value=course.id) }}
             
                 <p>Course Name: {{ course.subject }}</p>
@@ -27,7 +27,7 @@
                     {% endif %}
                 </p>
                 
-                <!-- Dynamically update button value with the course ID and subject -->
+                 
                 <p>
                     {{ enroll_form.submit_enroll(class_="search-btn") }} 
                     <span>Enroll in {{ course.subject }}</span>

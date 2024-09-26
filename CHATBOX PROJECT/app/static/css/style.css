@@ -13,6 +13,7 @@
     margin: 0;
     padding: 0;
     min-height: 100%;
+    padding-top: 20px;
   }
 
   
@@ -29,6 +30,7 @@
     
   }
   
+  /*navbar styling*/
   .navbar ul {
     list-style-type: none;
     padding: none;
@@ -44,7 +46,7 @@
   }
   
   .navbar ul li a:hover {
-    background-color: #575757;
+    background-color: #007bb5;
     text-decoration: none; /* Keep underline removed on hover */
   }
 
@@ -87,6 +89,7 @@
     font-weight: bold;
 }
 
+/*form styling when someone selects field*/
 .form select,
 .form input[type="email"],
 .form input[type="password"],
@@ -103,6 +106,7 @@
     text-align: center;
 }
 
+/* placeholder for forms*/
 .form input[type="email"]::placeholder,
 .form input[type="password"]::placeholder, 
 .form input[type="text"]::placeholder,
@@ -112,7 +116,6 @@
 
 .form button {
     width: 100%;
-     
     background-color: #00A2E8;
     color: white;
     border: none;
@@ -128,10 +131,6 @@
     background-color: #007bb5;
 }
 
-.form .submit-button {
-    font-size: 24px;
-    color: rgb(153, 59, 59);
-}
 
 .error {
     color: red;
@@ -372,7 +371,8 @@
   font-size: 12px;
 }
 
-.item a[href*="delete_course"]:hover {
+.item a[href*="delete_course"]:hover,
+.item a[href*="leave_course"]:hover {
   background-color: #d42f2f;
 }
 
@@ -478,11 +478,12 @@
   overflow: visible; /* Ensure scrolling works when content overflows */
   flex: 1 0 auto; /* Let the content grow and shrink as necessary */
   overflow-y: auto; /* Allow vertical scrolling */
+  padding-top: 20px;
 }
 
 /* Add padding and margins as needed for the content */
 .content-wrapper > * {
-  padding: 10px;
+  padding: 20px;
 }
 
 
@@ -490,11 +491,11 @@
 footer {
   background-color: #333;
   color: white;
-   
   text-align: center;
   margin-top: auto; /* Push footer to bottom */
 }
 
+/* this is the image on the homepage*/
 .image-section {
   flex: 1;
   display: flex;
@@ -502,6 +503,7 @@ footer {
   align-items: center;
 
 }
+
 
 .img-section img{
   width:70%;
@@ -556,6 +558,7 @@ footer {
 
 }
 
+/*media query, at screens 768px or less*/
 @media (max-width: 768px){
   /* Stack content on smaller screens */
   .container {

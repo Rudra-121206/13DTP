@@ -2,9 +2,8 @@ from app.routes import db
 from flask_login import UserMixin
 
 Enrolement = db.Table('Enrolement',
-    db.Column('user_id', db.Integer, db.ForeignKey('User.id')),
-    db.Column('course_id', db.Integer, db.ForeignKey('Course.id'))
-)
+                      db.Column('user_id', db.Integer, db.ForeignKey('User.id')),
+                      db.Column('course_id', db.Integer, db.ForeignKey('Course.id')))
 
 
 class User(UserMixin, db.Model):
@@ -47,7 +46,6 @@ class Chat(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("User.id"))
     course_id = db.Column(db.Integer, db.ForeignKey("Course.id"))
     chat_content = db.Column(db.Text())
-    chat_status = db.Column(db.Text())
     timestamp = db.Column(db.DateTime())
 
     user = db.relationship('User', back_populates='course_chats')

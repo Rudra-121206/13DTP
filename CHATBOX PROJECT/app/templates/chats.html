@@ -1,24 +1,12 @@
 
-<script>
-    // Function to check for new messages
-    function checkForNewMessages() {
-        fetch('{{ url_for("check_new_messages", course_id=course_id, last_chat_id=chats[-1].chat_id if chats else 0) }}')
-            .then(response => response.json())
-            .then(data => {
-                if (data.new_messages) {
-                    location.reload();  // Reload the page if new messages are found
-                }
-            });
-    }
-
-    // Set an interval to check for new messages every 5 seconds
-    setInterval(checkForNewMessages, 1000);
-</script>
+<script src="/static/chat.js"></script>
 {% extends 'layout.html' %}
 {% block content %}
 <div class="chat-container">
+    <!--id fro java script to access-->
     <div class="chat-window" id="chat-window">
         {% for chat in chats %}
+        <!--gives different class names to messaages sent by you and others so we can change thier position later-->
         <div class="message {% if chat.user_id == current_user.id %}user{% endif %}">
             <p class="username">{{ name[loop.index0] }}</p>
             <p>{{ chat.chat_content }}</p>
@@ -38,11 +26,4 @@
         </button>
     </form>
 </div>
-<!-- JavaScript to scroll chat window to the bottom on load -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var chatWindow = document.getElementById('chat-window');
-        chatWindow.scrollTop = chatWindow.scrollHeight;  // Scroll to the bottom
-    });
-</script>
 {% endblock %}
