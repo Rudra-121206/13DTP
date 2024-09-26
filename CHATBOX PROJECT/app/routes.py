@@ -7,6 +7,7 @@ import logging
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, current_user, LoginManager, logout_user
 from datetime import datetime
+from better_profanity import profanity
 import random
 
 # Define base directory and configure SQLAlchemy database
@@ -156,7 +157,7 @@ def create_acc_teacher():
             # if email is unique create teacher account
             new_user = models.User()
             new_user.role = "teacher"
-            new_user.name = form.name.data
+            new_user.name = profanity.censor(form.name.data)
             new_user.email = form.email.data
             new_user.password = generate_password_hash(form.password.data)
             db.session.add(new_user)
@@ -215,7 +216,8 @@ def login():
         flash('User is already logged in', 'warning')
         return redirect(url_for('my_courses', ref=current_user.id))
     if request.method == 'POST':
-        if form.validate_on_submit():  # Validate the form when it's submitted
+        # Validate the form when it's submitted
+        if form.validate_on_submit():
             email = form.email.data
             password = form.password.data
             user = models.User.query.filter_by(email=email).first()
@@ -289,11 +291,11 @@ def chats(ref, course_id):
 
     form = forms.enter_chat()
     if request.method == 'POST':
-        if form.validate_on_submit():  # Check if the form was submitted and valid
+        if form.validate_on_submit():
             new_chat = models.Chat(
                 course_id=course_id,
                 user_id=ref,
-                chat_content=form.chat.data,
+                chat_content=profanity.censor(form.chat.data),
                 timestamp=datetime.now()
             )
             db.session.add(new_chat)

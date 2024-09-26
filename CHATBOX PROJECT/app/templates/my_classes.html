@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="grid-container">
+    <!--if user has no courses the user is shown a button to join or create more courses depending on user-->
     {% if course_user|length == 0 %}
         {% if current_user.has_role('teacher') %}
             <p>you have not created any courses</p>
@@ -11,6 +12,7 @@
         {% endif %}
     {% else %}
         {% for course in course_user %}
+        <!--the role of the user determines what they see and what they can do as teachers and students should have different accesibilities-->
         <div class="item">  
             {% if current_user.has_role('teacher') %}
                 <a href="/delete_course/{{current_user.id}}/{{course.id}}">delete course</a>

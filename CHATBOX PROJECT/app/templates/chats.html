@@ -3,7 +3,7 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="chat-container">
-    <!--id fro java script to access-->
+    <!--id for java script to access-->
     <div class="chat-window" id="chat-window">
         {% for chat in chats %}
         <!--gives different class names to messaages sent by you and others so we can change thier position later-->
@@ -15,12 +15,8 @@
         {% endfor %}
     </div>
     <form method="POST" class="input-area" novalidate>
-        {{ form.hidden_tag() }}  <!-- Renders the CSRF token -->
-    
-        <!-- Render the chat input field with a placeholder -->
+        {{ form.hidden_tag() }}       
         {{ form.chat }}
-    
-        <!-- Render the submit button with an icon -->
         <button type="submit">
             <img src="/static/images/send-button.jpg" alt="Send">
         </button>

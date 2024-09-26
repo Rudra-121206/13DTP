@@ -1,5 +1,6 @@
 <nav>
     <div class="navbar">
+        <!--check user is logged in and show users different features according to thier role-->
         {% if current_user.is_authenticated %}
             {% if current_user.has_role('teacher') %}
                 <ul>

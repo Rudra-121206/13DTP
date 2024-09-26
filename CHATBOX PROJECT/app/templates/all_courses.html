@@ -10,6 +10,7 @@
 </div>
 
 <div class="grid-container">
+    <!--diff. form for each course in a for loop so we don't have to manually create a diff form for each course-->
     {% for course, enroll_form in zip(all_courses, enroll_forms) %}
         <div class="form">
             <form method="POST" enctype="multipart/form-data" novalidate>

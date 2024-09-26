@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="container">
+    <!--different class names so we can assign white backgrounds withou having to repeat css-->
     <div class="form form-white-bg">
         <form method="POST" enctype="multipart/form-data" novalidate>
             {{ form.csrf_token }}

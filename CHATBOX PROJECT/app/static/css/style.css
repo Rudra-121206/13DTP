@@ -22,7 +22,7 @@
   .navbar {
     background-color: #00aaff;
     color: white;
-    position: sticky; /* Sticky position */
+    position: sticky;  
     top: 0; /* Sticks to the top */
     width: 100%; /* Full-width */
     z-index: 1000; /* Ensure it stays on top */
@@ -58,7 +58,7 @@
   }
 
   
- 
+  /*form styling*/
   .form {
     width: 350px;
     padding: 20px;
@@ -71,14 +71,14 @@
     color: white;
     
 }
-  
+  /* turns image into a circle */
 .form img {
     width:  20%;
     height: 20%;
     border-radius: 50%;
     margin-bottom: 20px;
 }
-
+  
 .form p {
     text-align: left;
     font-size: 18px;
@@ -278,6 +278,7 @@
   margin-left: 10px;
 }
 
+/* image of submit button */
 .input-area button img {
   width: 100%;
   max-width: 40px;
@@ -305,7 +306,7 @@
   }
 }
 
-
+/* styling for container */
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -359,7 +360,7 @@
   background-color: #007bb5;
 }
 
-/* Teacher Specific Links */
+/* Leave course and delete course links */
 .item a[href*="delete_course"],
 .item a[href*="leave_course"] {
   position: absolute;
@@ -370,6 +371,7 @@
   border-radius: 5px;
   font-size: 12px;
 }
+
 
 .item a[href*="delete_course"]:hover,
 .item a[href*="leave_course"]:hover {
@@ -427,6 +429,7 @@
   margin: 0 auto;
 }
 
+/* styling for the flashes*/
 .flashes li {
   padding: 20px;
   margin: 10px 0;
@@ -504,7 +507,7 @@ footer {
 
 }
 
-
+/* image for home page */
 .img-section img{
   width:70%;
   max-width: 400px;
