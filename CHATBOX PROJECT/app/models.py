@@ -23,6 +23,7 @@ class User(UserMixin, db.Model):
     def get_id(self):
         return str(self.id)
 
+    # function for getting the role of a user
     def has_role(self, role_name):
         return self.role == role_name
 

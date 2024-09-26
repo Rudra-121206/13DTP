@@ -157,7 +157,7 @@ def create_acc_teacher():
             # if email is unique create teacher account
             new_user = models.User()
             new_user.role = "teacher"
-            new_user.name = profanity.censor(form.name.data)
+            new_user.name = form.name.data
             new_user.email = form.email.data
             new_user.password = generate_password_hash(form.password.data)
             db.session.add(new_user)
