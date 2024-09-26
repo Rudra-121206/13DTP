@@ -135,7 +135,7 @@ def all_courses(ref):
                            all_courses=all_courses,
                            enroll_forms=enroll_forms,
                            search_form=search_form,
-                           zip=zip)
+                           zip=zip, title='all courses')
 
 
 # Route to create a teacher account
@@ -204,7 +204,7 @@ def create_acc_student():
             flash('Errors have occurred in form submission.', 'error')
 
     return render_template('create_acc_student.html', form=form,
-                           title='Create an account (teacher)')
+                           title='Create an account (tstudent)')
 
 
 # Route for user login
@@ -231,7 +231,7 @@ def login():
         else:
             flash('errors have occured in from submission', 'error')
     # GET request or if validation fails, re-render the form
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, title=login)
 
 
 # Route to display courses for the logged-in user
@@ -251,7 +251,8 @@ def my_courses(ref):
     else:
         flash('Login required', 'warning')
         return redirect(url_for('login'))
-    return render_template('my_classes.html', course_user=course_user)
+    return render_template('my_classes.html', course_user=course_user,
+                           title='my courses')
 
 
 # Route for logging out the user
@@ -305,7 +306,7 @@ def chats(ref, course_id):
         else:
             flash('please enter text between 2 and 60 char', 'error')
     return render_template('chats.html', form=form, chats=chats, name=name,
-                           course_id=course_id)
+                           course_id=course_id, title=course.subject)
 
 
 # Route to create a new course (teachers only)
@@ -355,9 +356,11 @@ def create_course():
                     return redirect(url_for('my_courses', ref=current_user.id))
             else:
                 flash('Error have occured in from submission', 'error')
-                return render_template('create_course.html', form=form)
+                return render_template('create_course.html', form=form,
+                                       title='create course')
         else:
-            return render_template('create_course.html', form=form)
+            return render_template('create_course.html', form=form, 
+                                   title='create course')
     # If the user is a student, deny access to course creation
     # because only teachers can create a course
     else:
