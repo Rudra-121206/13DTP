@@ -273,6 +273,9 @@ def not_found_error(error):
 def chats(ref, course_id):
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
+    if current_user.id != ref:
+        flash('Unauthorised access', 'error')
+        return redirect(url_for('home'))
 
     # Ensure that the user is enrolled in the course
     course = models.Course.query.get(course_id)
